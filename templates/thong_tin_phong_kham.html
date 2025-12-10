@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông tin phòng khám & bác sĩ</title>
+</head>
+<body>
+    <h1>Thông tin phòng khám</h1>
+
+    <p><strong>Tên phòng khám:</strong> {{ thong_tin.ten }}</p>
+    <p><strong>Địa chỉ:</strong> {{ thong_tin.dia_chi }}</p>
+    <p><strong>Số điện thoại:</strong> {{ thong_tin.so_dien_thoai }}</p>
+    <p><strong>Giờ làm việc:</strong> {{ thong_tin.gio_lam_viec }}</p>
+
+    <hr>
+
+    <h2>Danh sách bác sĩ</h2>
+
+    {% if ds_bac_si %}
+        <table border="1" cellpadding="5" cellspacing="0">
+            <tr>
+                <th>Mã bác sĩ</th>
+                <th>Họ tên</th>
+                <th>Chuyên khoa</th>
+                <th>Kinh nghiệm (năm)</th>
+                <th>Số điện thoại</th>
+            </tr>
+            {% for bs in ds_bac_si %}
+                <tr>
+                    <td>{{ bs.BacSiID }}</td>
+                    <td>{{ bs.HoTen }}</td>
+                    <td>{{ bs.TenChuyenKhoa }}</td>
+                    <td>{{ bs.KinhNghiemNam }}</td>
+                    <td>{{ bs.SoDienThoai }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Chưa có bác sĩ nào được cấu hình trong hệ thống.</p>
+    {% endif %}
+
+    <br>
+    <p>
+        <a href="{{ url_for('dang_nhap') }}">Về trang đăng nhập</a> |
+        <a href="{{ url_for('trang_benh_nhan') }}">Về trang bệnh nhân</a>
+    </p>
+</body>
+</html>

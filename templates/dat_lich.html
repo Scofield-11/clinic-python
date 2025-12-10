@@ -30,12 +30,15 @@
         <label>Giờ khám:</label><br>
         <input type="time" name="gio_kham"><br><br>
 
-        <label>Lý do khám:</label><br>
-        <textarea name="ly_do"></textarea><br><br>
+        <label>Lý do khám (tùy chọn):</label><br>
+        <textarea name="ly_do" rows="3" cols="40"></textarea><br><br>
 
         <button type="submit">Đặt lịch</button>
     </form>
 
-    <p><a href="{{ url_for('trang_benh_nhan') }}">Quay lại trang bệnh nhân</a></p>
+    <p>
+        <a href="{{ url_for('trang_benh_nhan') }}">Quay lại trang bệnh nhân</a> |
+        <a href="{{ url_for('thong_tin_phong_kham') }}">Xem thông tin phòng khám & bác sĩ</a>
+    </p>
 </body>
 </html>
