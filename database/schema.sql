@@ -60,6 +60,8 @@ INSERT INTO CHUYEN_KHOA (TenChuyenKhoa, MoTa) VALUES
 
 INSERT INTO BAC_SI (ChuyenKhoaID, HoTen, HocVan, KinhNghiemNam, SoDienThoai)
 VALUES
-(1, 'BS. Nguyễn Văn A', 'BS Nội tổng quát', 5, '0909000001'),
-(2, 'BS. Trần Thị B', 'BS Nhi', 7, '0909000002'),
-(3, 'BS. Lê Văn C', 'BS Da liễu', 4, '0909000003');
+(1, 'BS. Lê Văn Quang', 'BS Nội tổng quát', 5, '0909000001'),
+(2, 'BS. Lê Thị Hồng Nhung', 'BS Nhi', 7, '0909000002'),
+(3, 'BS. Trần Văn Phục', 'BS Da liễu', 4, '0909000003'),
+(3, 'BS. Vũ Quang Du', 'BS Da liễu', 4, '0909000004'),
+(3, 'BS. Nguyễn Khắc Phát', 'BS Da liễu', 4, '0909000005');
