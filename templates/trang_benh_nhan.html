@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang bệnh nhân</title>
+</head>
+<body>
+    <h2>Xin chào, {{ ten_dang_nhap }}</h2>
+
+    <p>
+        <a href="{{ url_for('dat_lich') }}">Đặt lịch khám</a> |
+        <a href="{{ url_for('dang_xuat') }}">Đăng xuất</a>
+    </p>
+
+    <h3>Lịch hẹn của tôi</h3>
+    {% if lich_hen %}
+        <table border="1" cellpadding="5">
+            <tr>
+                <th>Bác sĩ</th>
+                <th>Ngày khám</th>
+                <th>Giờ khám</th>
+                <th>Trạng thái</th>
+            </tr>
+            {% for lh in lich_hen %}
+                <tr>
+                    <td>{{ lh.TenBacSi }}</td>
+                    <td>{{ lh.NgayKham }}</td>
+                    <td>{{ lh.GioKham }}</td>
+                    <td>{{ lh.TrangThai }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Chưa có lịch hẹn nào.</p>
+    {% endif %}
+</body>
+</html>

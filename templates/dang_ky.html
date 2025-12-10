@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký tài khoản</title>
+</head>
+<body>
+    <h2>Đăng ký tài khoản</h2>
+
+    {% if loi %}
+        <ul style="color:red;">
+            {% for msg in loi %}
+                <li>{{ msg }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="post">
+        <label>Tên đăng nhập:</label><br>
+        <input type="text" name="ten_dang_nhap"><br><br>
+
+        <label>Mật khẩu:</label><br>
+        <input type="password" name="mat_khau"><br><br>
+
+        <label>Nhập lại mật khẩu:</label><br>
+        <input type="password" name="xac_nhan_mat_khau"><br><br>
+
+        <label>Họ tên:</label><br>
+        <input type="text" name="ho_ten"><br><br>
+
+        <label>Ngày sinh:</label><br>
+        <input type="date" name="ngay_sinh"><br><br>
+
+        <label>Giới tính:</label><br>
+        <select name="gioi_tinh">
+            <option value="">--Chọn--</option>
+            <option value="NAM">Nam</option>
+            <option value="NU">Nữ</option>
+            <option value="KHAC">Khác</option>
+        </select><br><br>
+
+        <label>Địa chỉ:</label><br>
+        <textarea name="dia_chi"></textarea><br><br>
+
+        <button type="submit">Đăng ký</button>
+    </form>
+
+    <p>Đã có tài khoản? <a href="{{ url_for('dang_nhap') }}">Đăng nhập</a></p>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đặt lịch khám</title>
+</head>
+<body>
+    <h2>Đặt lịch khám</h2>
+
+    {% if loi %}
+        <ul style="color:red;">
+            {% for msg in loi %}
+                <li>{{ msg }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="post">
+        <label>Chọn bác sĩ:</label><br>
+        <select name="bac_si">
+            <option value="">-- Chọn bác sĩ --</option>
+            {% for bs in ds_bac_si %}
+                <option value="{{ bs.BacSiID }}">{{ bs.HoTen }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label>Ngày khám:</label><br>
+        <input type="date" name="ngay_kham"><br><br>
+
+        <label>Giờ khám:</label><br>
+        <input type="time" name="gio_kham"><br><br>
+
+        <label>Lý do khám:</label><br>
+        <textarea name="ly_do"></textarea><br><br>
+
+        <button type="submit">Đặt lịch</button>
+    </form>
+
+    <p><a href="{{ url_for('trang_benh_nhan') }}">Quay lại trang bệnh nhân</a></p>
+</body>
+</html>
