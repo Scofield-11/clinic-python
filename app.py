@@ -33,6 +33,7 @@ def dang_ky():
     mat_khau = request.form.get("mat_khau", "")
     xac_nhan = request.form.get("xac_nhan_mat_khau", "")
     ho_ten = request.form.get("ho_ten", "").strip()
+    so_dien_thoai = request.form.get("so_dien_thoai", "").strip()
     ngay_sinh = request.form.get("ngay_sinh", None)
     gioi_tinh = request.form.get("gioi_tinh", None)
     dia_chi = request.form.get("dia_chi", "").strip()
@@ -40,6 +41,10 @@ def dang_ky():
     loi = []
     if not ten_dang_nhap:
         loi.append("Tên đăng nhập không được để trống.")
+    if not so_dien_thoai:
+        loi.append("Số điện thoại không được để trống.")
+    elif len(so_dien_thoai) < 9 or len(so_dien_thoai) > 11:
+        loi.append("Số điện thoại không hợp lệ (9-11 số).")
     if not ho_ten:
         loi.append("Họ tên không được để trống.")
     if not mat_khau or not xac_nhan:
@@ -67,10 +72,10 @@ def dang_ky():
 
             # Đơn giản: lưu mật khẩu dạng plain text cho dễ (thực tế nên hash)
             sql_tk = """
-                INSERT INTO TAI_KHOAN (TenDangNhap, MatKhau, VaiTro, TrangThai)
-                VALUES (%s, %s, 'BENH_NHAN', 1)
+                INSERT INTO TAI_KHOAN (TenDangNhap, MatKhau, SoDienThoai, VaiTro, TrangThai)
+                VALUES (%s, %s, %s, 'BENH_NHAN', 1)
             """
-            cur.execute(sql_tk, (ten_dang_nhap, mat_khau))
+            cur.execute(sql_tk, (ten_dang_nhap, mat_khau, so_dien_thoai))
             account_id = cur.lastrowid
 
             sql_bn = """
