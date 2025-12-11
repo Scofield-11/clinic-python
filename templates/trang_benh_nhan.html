@@ -3,35 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>Trang bệnh nhân</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-    <h2>Xin chào, {{ ten_dang_nhap }}</h2>
+<body class="patient-page">
 
-    <p>
-        <a href="{{ url_for('dat_lich') }}">Đặt lịch khám</a> |
-        <a href="{{ url_for('dang_xuat') }}">Đăng xuất</a>
-    </p>
+<div class="patient-container">
+    <!-- Thanh trên cùng -->
+    <header class="patient-header">
+        <div>
+            <h1>Xin chào, {{ ten_dang_nhap }}</h1>
+            <p class="patient-subtitle">Hệ thống quản lý lịch khám phòng khám Thuỷ Lợi</p>
+        </div>
+        <div class="patient-header-actions">
+            <a href="{{ url_for('dat_lich') }}" class="btn btn-secondary">Đặt lịch khám</a>
+            <a href="{{ url_for('dang_xuat') }}" class="btn btn-outline">Đăng xuất</a>
+        </div>
+    </header>
 
-    <h3>Lịch hẹn của tôi</h3>
-    {% if lich_hen %}
-        <table border="1" cellpadding="5">
-            <tr>
-                <th>Bác sĩ</th>
-                <th>Ngày khám</th>
-                <th>Giờ khám</th>
-                <th>Trạng thái</th>
-            </tr>
-            {% for lh in lich_hen %}
-                <tr>
-                    <td>{{ lh.TenBacSi }}</td>
-                    <td>{{ lh.NgayKham }}</td>
-                    <td>{{ lh.GioKham }}</td>
-                    <td>{{ lh.TrangThai }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>Chưa có lịch hẹn nào.</p>
-    {% endif %}
+    <!-- Khối nội dung chính -->
+    <main class="patient-main">
+        <section class="card">
+            <div class="card-header">
+                <h2>Lịch hẹn của tôi</h2>
+                <a href="{{ url_for('thong_tin_phong_kham') }}" class="small-link">
+                    Xem thông tin phòng khám & bác sĩ
+                </a>
+            </div>
+
+            {% if lich_hen %}
+                <table class="patient-table">
+                    <thead>
+                        <tr>
+                            <th>Bác sĩ</th>
+                            <th>Ngày khám</th>
+                            <th>Giờ khám</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lh in lich_hen %}
+                            <tr>
+                                <td>{{ lh.TenBacSi }}</td>
+                                <td>{{ lh.NgayKham }}</td>
+                                <td>{{ lh.GioKham }}</td>
+                                <td>{{ lh.TrangThai }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="empty-text">
+                    Bạn chưa có lịch hẹn nào.&nbsp;
+                    <a href="{{ url_for('dat_lich') }}">Đặt lịch khám ngay</a>.
+                </p>
+            {% endif %}
+        </section>
+    </main>
+</div>
+
 </body>
 </html>
