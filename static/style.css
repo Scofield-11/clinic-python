@@ -16,7 +16,7 @@ h2 {
 form {
     width: 300px;                     /* Chiều rộng form */
     background: white;                /* Màu nền trắng */
-    padding: 20px;                    /* Tạo khoảng cách bên trong */
+    padding: 20px 50px;                    /* Tạo khoảng cách bên trong */
     margin: 20px auto;                /* Căn giữa form */
     border-radius: 8px;               /* Bo tròn góc */
     box-shadow: 0 0 10px rgba(0,0,0,0.1);  /* Đổ bóng nhẹ */
@@ -80,6 +80,7 @@ body > p:last-of-type a {
     color: rgb(138, 129, 232);
     font-weight: bold;
 }
+
 
 
 /* ===== TRANG BỆNH NHÂN ===== */
@@ -228,3 +229,53 @@ body > p:last-of-type a {
 }
 
 
+/* ===== TRANG THÔNG TIN PHÒNG KHÁM (ĐƠN GIẢN) ===== */
+
+.clinic-title {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Khung thông tin phòng khám */
+.clinic-box {
+    background: white;
+    width: 360px;
+    margin: 0 auto 20px auto;   /* căn giữa */
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+/* Bảng danh sách bác sĩ */
+.clinic-table {
+    width: 90%;
+    margin: 0 auto 20px auto;   /* căn giữa */
+    border-collapse: collapse;
+    background: white;
+}
+
+.clinic-table th,
+.clinic-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.clinic-table th {
+    background-color: #e8eef5;
+}
+
+/* Khi chưa có bác sĩ */
+.clinic-empty {
+    text-align: center;
+    color: #666;
+    margin-top: 10px;
+}
+
+/* Link dưới cùng */
+.clinic-links {
+    text-align: center;
+    margin-bottom: 20px;
+}
