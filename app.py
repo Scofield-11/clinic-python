@@ -1,4 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+#render_template: trả về file HTML trong thư mục templates/.
+#request: đọc dữ liệu mà trình duyệt gửi lên (form, query string…).
+#redirect: trả về response kiểu “hãy đi sang URL khác”.
+#url_for: sinh URL từ tên hàm (không phải gõ chuỗi /dang-nhap thô).
+#session: chỗ để lưu thông tin đăng nhập trên server (dùng cookie mã hoá).
 import pymysql
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, date
@@ -16,6 +21,13 @@ def get_connection():
         cursorclass=pymysql.cursors.DictCursor
     )
     return conn
+#DictCursor giúp dòng dữ liệu trả về dạng dict:
+#ví dụ: row["TenDangNhap"] thay vì row[0].
+
+#execute(): chạy câu lệnh SQL
+#fetchone(): lấy 1 dòng dữ liệu duy nhất từ kết quả SELECT.
+#commit(): Lưu thay đổi vào database
+#cur.lastrowid: Lấy ID của dòng vừa INSERT
 
 
 # Trang gốc: chuyển tới đăng nhập
