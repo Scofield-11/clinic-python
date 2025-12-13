@@ -1,67 +1,65 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Trang bệnh nhân</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<!DOCTYPE html> <!-- Khai báo HTML5 -->
+<html lang="vi"> <!-- Mở trang tiếng Việt -->
+<head> <!-- Phần head -->
+    <meta charset="UTF-8"> <!-- UTF-8 -->
+    <title>Lịch hẹn của tôi</title> <!-- Tiêu đề -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> <!-- Link CSS -->
+</head> <!-- Đóng head -->
 
+<body class="patient-page"> <!-- Mở body, gắn class patient-page -->
 
-</head>
-<body class="patient-page">
+<div class="patient-container"> <!-- Khung container chính -->
 
-<div class="patient-container">
-    <!-- Thanh trên cùng -->
-    <header class="patient-header">
-        <div>
-            <h1>Xin chào, {{ ten_dang_nhap }}</h1>
-            <p class="patient-subtitle">Hệ thống quản lý lịch khám phòng khám Thuỷ Lợi</p>
-        </div>
-        <div class="patient-header-actions">
-            <a href="{{ url_for('dat_lich') }}" class="btn btn-secondary">Đặt lịch khám</a>
-            <a href="{{ url_for('dang_xuat') }}" class="btn btn-outline">Đăng xuất</a>
-        </div>
-    </header>
+    <header class="patient-header"> <!-- Header -->
+        <h1>Lịch hẹn của tôi</h1> <!-- Tiêu đề lớn -->
+        <div class="patient-header-actions"> <!-- Nhóm nút -->
+            <a href="{{ url_for('dat_lich') }}" class="btn btn-secondary">Đặt lịch</a> <!-- Nút đặt lịch -->
+            <a href="{{ url_for('dang_xuat') }}" class="btn btn-outline">Đăng xuất</a> <!-- Nút đăng xuất -->
+        </div> <!-- Đóng nhóm nút -->
+    </header> <!-- Đóng header -->
 
-    <!-- Khối nội dung chính -->
-    <main class="patient-main">
-        <section class="card">
-            <div class="card-header">
-                <h2>Lịch hẹn của tôi</h2>
-                <a href="{{ url_for('thong_tin_phong_kham') }}" class="small-link">
-                    Xem thông tin phòng khám & bác sĩ
-                </a>
-            </div>
+    <section class="card"> <!-- Card trắng -->
+        {% if lich_hen %} <!-- Nếu có lịch hẹn -->
+        <table class="patient-table"> <!-- Bảng lịch hẹn -->
+            <thead> <!-- Phần tiêu đề bảng -->
+                <tr> <!-- Một hàng tiêu đề -->
+                    <th>Bác sĩ</th> <!-- Cột bác sĩ -->
+                    <th>Ngày</th> <!-- Cột ngày -->
+                    <th>Giờ</th> <!-- Cột giờ -->
+                    <th>Trạng thái</th> <!-- Cột trạng thái -->
+                    <th>Thao tác</th> <!-- Cột thao tác -->
+                </tr> <!-- Đóng hàng -->
+            </thead> <!-- Đóng thead -->
 
-            {% if lich_hen %}
-                <table class="patient-table">
-                    <thead>
-                        <tr>
-                            <th>Bác sĩ</th>
-                            <th>Ngày khám</th>
-                            <th>Giờ khám</th>
-                            <th>Trạng thái</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for lh in lich_hen %}
-                            <tr>
-                                <td>{{ lh.TenBacSi }}</td>
-                                <td>{{ lh.NgayKham }}</td>
-                                <td>{{ lh.GioKham }}</td>
-                                <td>{{ lh.TrangThai }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p class="empty-text">
-                    Bạn chưa có lịch hẹn nào.&nbsp;
-                    <a href="{{ url_for('dat_lich') }}">Đặt lịch khám ngay</a>.
-                </p>
-            {% endif %}
-        </section>
-    </main>
-</div>
+            <tbody> <!-- Phần thân bảng -->
+            {% for lh in lich_hen %} <!-- Lặp từng lịch hẹn -->
+                <tr> <!-- Một dòng dữ liệu -->
+                    <td>{{ lh.TenBacSi }}</td> <!-- Tên bác sĩ -->
+                    <td>{{ lh.NgayKham }}</td> <!-- Ngày khám -->
+                    <td>{{ lh.GioKham }}</td> <!-- Giờ khám -->
+                    <td>{{ lh.TrangThai }}</td> <!-- Trạng thái -->
+                    <td class="action-cell">
+                        {% if lh.TrangThai in ['CHO_XAC_NHAN', 'DA_XAC_NHAN'] %}
+                            <!-- Form huỷ lịch -->
+                            <form method="post"
+                                action="{{ url_for('huy_lich', lich_hen_id=lh.LichHenID) }}"
+                                onsubmit="return confirm('Bạn có chắc chắn muốn huỷ lịch khám này?')">
+                                <button type="submit" class="btn btn-secondary">Huỷ</button>
+                            </form>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr> <!-- Đóng dòng -->
+            {% endfor %} <!-- Kết thúc vòng lặp -->
+            </tbody> <!-- Đóng tbody -->
+        </table> <!-- Đóng table -->
+        {% else %} <!-- Nếu không có lịch hẹn -->
+            <p class="empty-text">Bạn chưa có lịch hẹn nào.</p> <!-- Thông báo -->
+        {% endif %} <!-- Kết thúc if -->
+    </section> <!-- Đóng section -->
 
-</body>
-</html>
+</div> <!-- Đóng container -->
+
+</body> <!-- Đóng body -->
+</html> <!-- Đóng html -->

@@ -1,46 +1,46 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Đặt lịch khám</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<!DOCTYPE html> <!-- Khai báo HTML5 -->
+<html lang="vi"> <!-- Mở trang tiếng Việt -->
+<head> <!-- Phần head -->
+    <meta charset="UTF-8"> <!-- UTF-8 -->
+    <title>Đặt lịch khám</title> <!-- Tiêu đề -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> <!-- Link CSS -->
 
-</head>
-<body>
-    <h2>Đặt lịch khám</h2>
+</head> <!-- Đóng head -->
+<body> <!-- Mở body -->
+    <h2>Đặt lịch khám</h2> <!-- Tiêu đề -->
 
-    {% if loi %}
-        <ul style="color:red;">
-            {% for msg in loi %}
-                <li>{{ msg }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    {% if loi %} <!-- Nếu có lỗi -->
+        <ul style="color:red;"> <!-- Danh sách lỗi -->
+            {% for msg in loi %} <!-- Lặp lỗi -->
+                <li>{{ msg }}</li> <!-- Hiển thị lỗi -->
+            {% endfor %} <!-- Kết thúc vòng lặp -->
+        </ul> <!-- Đóng ul -->
+    {% endif %} <!-- Kết thúc if -->
 
-    <form method="post">
-        <label>Chọn bác sĩ:</label><br>
-        <select name="bac_si">
-            <option value="">-- Chọn bác sĩ --</option>
-            {% for bs in ds_bac_si %}
-                <option value="{{ bs.BacSiID }}">{{ bs.HoTen }}</option>
-            {% endfor %}
-        </select><br><br>
+    <form method="post"> <!-- Form đặt lịch -->
+        <label>Chọn bác sĩ:</label><br> <!-- Nhãn chọn bác sĩ -->
+        <select name="bac_si"> <!-- Dropdown bác sĩ -->
+            <option value="">-- Chọn bác sĩ --</option> <!-- Option mặc định -->
+            {% for bs in ds_bac_si %} <!-- Lặp danh sách bác sĩ -->
+                <option value="{{ bs.BacSiID }}">{{ bs.HoTen }}</option> <!-- Option bác sĩ -->
+            {% endfor %} <!-- Kết thúc vòng lặp -->
+        </select><br><br> <!-- Đóng select + xuống dòng -->
 
-        <label>Ngày khám:</label><br>
-        <input type="date" name="ngay_kham"><br><br>
+        <label>Ngày khám:</label><br> <!-- Nhãn ngày khám -->
+        <input type="date" name="ngay_kham"><br><br> <!-- Ô chọn ngày -->
 
-        <label>Giờ khám:</label><br>
-        <input type="time" name="gio_kham"><br><br>
+        <label>Giờ khám:</label><br> <!-- Nhãn giờ khám -->
+        <input type="time" name="gio_kham"><br><br> <!-- Ô chọn giờ -->
 
-        <label>Lý do khám (tùy chọn):</label><br>
-        <textarea name="ly_do" rows="3" cols="40"></textarea><br><br>
+        <label>Lý do khám (tùy chọn):</label><br> <!-- Nhãn lý do -->
+        <textarea name="ly_do" rows="3" cols="40"></textarea><br><br> <!-- Ô nhập lý do -->
 
-        <button type="submit">Đặt lịch</button>
-    </form>
+        <button type="submit">Đặt lịch</button> <!-- Nút đặt lịch -->
+    </form> <!-- Đóng form -->
 
-    <p>
-        <a href="{{ url_for('trang_benh_nhan') }}">Quay lại trang bệnh nhân</a> |
-        <a href="{{ url_for('thong_tin_phong_kham') }}">Xem thông tin phòng khám & bác sĩ</a>
-    </p>
-</body>
-</html>
+    <p> <!-- Đoạn chứa link điều hướng -->
+        <a href="{{ url_for('trang_benh_nhan') }}">Quay lại trang bệnh nhân</a> | <!-- Link về trang bệnh nhân -->
+        <a href="{{ url_for('thong_tin_phong_kham') }}">Xem thông tin phòng khám & bác sĩ</a> <!-- Link xem thông tin phòng khám -->
+    </p> <!-- Đóng đoạn -->
+</body> <!-- Đóng body -->
+</html> <!-- Đóng html -->

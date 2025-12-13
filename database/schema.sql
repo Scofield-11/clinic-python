@@ -50,18 +50,23 @@ CREATE TABLE LICH_HEN (
     NgayTao DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (PatientID) REFERENCES BENH_NHAN(PatientID),
     FOREIGN KEY (BacSiID) REFERENCES BAC_SI(BacSiID),
-    CONSTRAINT uq_LichHen UNIQUE (BacSiID, NgayKham, GioKham)
+    
 );
+CREATE INDEX idx_lichhen_bacsi_ngay_gio
+ON LICH_HEN (BacSiID, NgayKham, GioKham);
+
 
 INSERT INTO CHUYEN_KHOA (TenChuyenKhoa, MoTa) VALUES
 ('Nội tổng quát', 'Khám và điều trị các bệnh nội khoa thường gặp'),
 ('Nhi', 'Khám và điều trị cho trẻ em'),
-('Da liễu', 'Khám và điều trị các bệnh về da');
+('Da liễu', 'Khám và điều trị các bệnh về da'),
+('Răng Hàm Mặt', 'Khám và điều trị bệnh về răng hàm mặt'),
+('Tim mạch', 'Khám và điều trị bệnh nhân bệnh tim');
 
 INSERT INTO BAC_SI (ChuyenKhoaID, HoTen, HocVan, KinhNghiemNam, SoDienThoai)
 VALUES
 (1, 'BS. Lê Văn Quang', 'BS Nội tổng quát', 5, '0909000001'),
 (2, 'BS. Lê Thị Hồng Nhung', 'BS Nhi', 7, '0909000002'),
 (3, 'BS. Trần Văn Phục', 'BS Da liễu', 4, '0909000003'),
-(3, 'BS. Vũ Quang Du', 'BS Da liễu', 4, '0909000004'),
-(3, 'BS. Nguyễn Khắc Phát', 'BS Da liễu', 4, '0909000005');
+(5, 'BS. Vũ Quang Du', 'BS Tim mạch', 8, '0909000004'),
+(4, 'BS. Nguyễn Khắc Phát', 'BS Răng Hàm Mặt', 4, '0909000005');

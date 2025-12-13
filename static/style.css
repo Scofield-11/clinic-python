@@ -1,76 +1,78 @@
 /* Định dạng chung cho toàn trang */
 body {
-    font-family: Arial, sans-serif;    /* Font chữ dễ đọc */
-    background-color: #ffffff;         /* 🎨 Nền xanh */
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
     margin: 0;
     padding: 0;
 }
 
 /* Tiêu đề (h1, h2) đặt giữa */
 h2 {
-    text-align: center;               /* Canh giữa */
-    color: #333;                      /* Màu chữ xám đậm */
+    text-align: center;
+    color: #333;
 }
 
 /* Khung chứa form */
 form {
-    width: 300px;                     /* Chiều rộng form */
-    background: white;                /* Màu nền trắng */
-    padding: 20px 50px;                    /* Tạo khoảng cách bên trong */
-    margin: 20px auto;                /* Căn giữa form */
-    border-radius: 8px;               /* Bo tròn góc */
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);  /* Đổ bóng nhẹ */
+    width: 300px;
+    background: white;
+    padding: 20px 50px;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 /* Input (ô nhập dữ liệu) */
 input, select, textarea {
-    width: 100%;                      /* Chiếm toàn chiều rộng form */
-    padding: 8px;                     /* Tạo khoảng cách cho dễ bấm */
-    margin-top: 5px;                  /* Tạo khoảng cách phía trên */
-    margin-bottom: 15px;              /* Tạo khoảng cách phía dưới */
-    border: 1px solid #ccc;           /* Viền xám */
-    border-radius: 4px;               /* Bo tròn viền */
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 /* Nút bấm */
 button {
-    width: 100%;                      /* Nút rộng toàn form */
-    padding: 10px;                    /* Tăng độ lớn nút */
-    background-color: #4CAF50;        /* Màu xanh lá */
-    color: white;                     /* Chữ màu trắng */
-    border: none;                     /* Không có viền */
-    border-radius: 4px;               /* Bo tròn */
-    cursor: pointer;                  /* Hiện icon bàn tay khi di chuột */
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 button:hover {
-    background-color: #45a049;        /* Khi rê chuột, nút đậm màu hơn */
+    background-color: #45a049;
 }
 
 /* Liên kết (Đăng ký / Đăng nhập) */
 a {
-    color: #0066cc;                   /* Màu xanh */
-    text-decoration: none;            /* Bỏ gạch chân */
+    color: #0066cc;
+    text-decoration: none;
 }
 
 a:hover {
-    text-decoration: underline;       /* Khi rê chuột thì gạch chân */
+    text-decoration: underline;
 }
-
 
 .center-link {
-    text-align: center;      /* Căn giữa chữ */
-    margin-top: 15px;        /* Tạo khoảng cách phía trên */
-    font-size: 16px;         /* Chữ dễ nhìn hơn */
-    color: white;            /* Chữ trắng cho nổi trên nền xanh */
+    text-align: center;
+    margin-top: 15px;
+    font-size: 16px;
+    color: white;
 }
+
 .center-link a {
-    color: rgb(135, 149, 251);           /* Nối link màu vàng cho nổi bật */
-    font-weight: bold;       /* Chữ đậm */
+    color: rgb(135, 149, 251);
+    font-weight: bold;
 }
+
 .center-link a:hover {
-    text-decoration: underline;   /* Hiệu ứng hover */
+    text-decoration: underline;
 }
+
 body > p:last-of-type {
     text-align: center;
     color: rgb(11, 3, 3);
@@ -81,27 +83,24 @@ body > p:last-of-type a {
     font-weight: bold;
 }
 
-
-
 /* ===== TRANG BỆNH NHÂN ===== */
-
 .patient-page {
     font-family: Arial, sans-serif;
-    background-color: #f4f7fb;     /* nền xám nhạt */
+    background-color: #f4f7fb;
     margin: 0;
     padding: 24px;
 }
 
 /* Khung chính */
 .patient-container {
-    max-width: 1000px;             /* giới hạn độ rộng */
-    margin: 0 auto;                /* căn giữa màn hình */
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 /* Header trên cùng */
 .patient-header {
     display: flex;
-    justify-content: space-between; /* chữ bên trái, nút bên phải */
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
 }
@@ -168,7 +167,7 @@ body > p:last-of-type a {
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-/* Tiêu đề trong card + link nhỏ bên phải */
+/* Card header */
 .card-header {
     display: flex;
     justify-content: space-between;
@@ -180,6 +179,7 @@ body > p:last-of-type a {
     margin: 0;
 }
 
+/* Link nhỏ */
 .small-link {
     font-size: 13px;
     color: #0066cc;
@@ -228,9 +228,7 @@ body > p:last-of-type a {
     text-decoration: underline;
 }
 
-
-/* ===== TRANG THÔNG TIN PHÒNG KHÁM (ĐƠN GIẢN) ===== */
-
+/* ===== TRANG THÔNG TIN PHÒNG KHÁM ===== */
 .clinic-title {
     text-align: center;
     margin-top: 20px;
@@ -241,7 +239,7 @@ body > p:last-of-type a {
 .clinic-box {
     background: white;
     width: 360px;
-    margin: 0 auto 20px auto;   /* căn giữa */
+    margin: 0 auto 20px auto;
     padding: 15px 20px;
     border-radius: 8px;
     box-shadow: 0 0 8px rgba(0,0,0,0.1);
@@ -250,7 +248,7 @@ body > p:last-of-type a {
 /* Bảng danh sách bác sĩ */
 .clinic-table {
     width: 90%;
-    margin: 0 auto 20px auto;   /* căn giữa */
+    margin: 0 auto 20px auto;
     border-collapse: collapse;
     background: white;
 }
@@ -278,4 +276,27 @@ body > p:last-of-type a {
 .clinic-links {
     text-align: center;
     margin-bottom: 20px;
+}
+
+/* ===== FIX CỘT THAO TÁC ===== */
+.action-cell {
+    text-align: center;
+    padding: 8px;
+    background: none;
+}
+
+.patient-table .action-cell form {
+    width: auto;
+    padding: 0;
+    margin: 0;
+    background: none;
+    box-shadow: none;
+    border-radius: 0;
+    display: inline-block;
+}
+
+.patient-table button,
+.patient-table .btn {
+    width: auto;
+    padding: 6px 12px;
 }

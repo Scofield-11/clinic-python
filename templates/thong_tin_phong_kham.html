@@ -1,50 +1,50 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Thông tin phòng khám</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
+<!DOCTYPE html> <!-- Khai báo HTML5 -->
+<html lang="vi"> <!-- Mở trang tiếng Việt -->
+<head> <!-- Phần head -->
+    <meta charset="UTF-8"> <!-- UTF-8 -->
+    <title>Thông tin phòng khám</title> <!-- Tiêu đề -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> <!-- Link CSS -->
+</head> <!-- Đóng head -->
+<body> <!-- Mở body -->
 
-    <h2 class="clinic-title">Thông tin phòng khám</h2>
+    <h2 class="clinic-title">Thông tin phòng khám</h2> <!-- Tiêu đề -->
 
-    <div class="clinic-box">
-        <p><strong>Tên phòng khám:</strong> {{ thong_tin.ten }}</p>
-        <p><strong>Địa chỉ:</strong> {{ thong_tin.dia_chi }}</p>
-        <p><strong>Số điện thoại:</strong> {{ thong_tin.so_dien_thoai }}</p>
-        <p><strong>Giờ làm việc:</strong> {{ thong_tin.gio_lam_viec }}</p>
-    </div>
+    <div class="clinic-box"> <!-- Khung thông tin phòng khám -->
+        <p><strong>Tên phòng khám:</strong> {{ thong_tin.ten }}</p> <!-- Tên phòng khám -->
+        <p><strong>Địa chỉ:</strong> {{ thong_tin.dia_chi }}</p> <!-- Địa chỉ -->
+        <p><strong>Số điện thoại:</strong> {{ thong_tin.so_dien_thoai }}</p> <!-- SĐT -->
+        <p><strong>Giờ làm việc:</strong> {{ thong_tin.gio_lam_viec }}</p> <!-- Giờ làm việc -->
+    </div> <!-- Đóng box -->
 
-    <h2 class="clinic-title">Danh sách bác sĩ</h2>
+    <h2 class="clinic-title">Danh sách bác sĩ</h2> <!-- Tiêu đề danh sách bác sĩ -->
 
-    {% if ds_bac_si %}
-        <table class="clinic-table">
-            <tr>
-                <th>Mã</th>
-                <th>Họ tên</th>
-                <th>Chuyên khoa</th>
-                <th>Kinh nghiệm</th>
-                <th>Số điện thoại</th>
-            </tr>
-            {% for bs in ds_bac_si %}
-                <tr>
-                    <td>{{ bs.BacSiID }}</td>
-                    <td>{{ bs.HoTen }}</td>
-                    <td>{{ bs.TenChuyenKhoa }}</td>
-                    <td>{{ bs.KinhNghiemNam }} năm</td>
-                    <td>{{ bs.SoDienThoai }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p class="clinic-empty">Chưa có bác sĩ nào được cấu hình trong hệ thống.</p>
-    {% endif %}
+    {% if ds_bac_si %} <!-- Nếu có bác sĩ -->
+        <table class="clinic-table"> <!-- Bảng bác sĩ -->
+            <tr> <!-- Hàng tiêu đề -->
+                <th>Mã</th> <!-- Cột mã -->
+                <th>Họ tên</th> <!-- Cột họ tên -->
+                <th>Chuyên khoa</th> <!-- Cột chuyên khoa -->
+                <th>Kinh nghiệm</th> <!-- Cột kinh nghiệm -->
+                <th>Số điện thoại</th> <!-- Cột số điện thoại -->
+            </tr> <!-- Đóng hàng -->
+            {% for bs in ds_bac_si %} <!-- Lặp danh sách bác sĩ -->
+                <tr> <!-- Dòng dữ liệu -->
+                    <td>{{ bs.BacSiID }}</td> <!-- Mã bác sĩ -->
+                    <td>{{ bs.HoTen }}</td> <!-- Tên bác sĩ -->
+                    <td>{{ bs.TenChuyenKhoa }}</td> <!-- Chuyên khoa -->
+                    <td>{{ bs.KinhNghiemNam }} năm</td> <!-- Kinh nghiệm -->
+                    <td>{{ bs.SoDienThoai }}</td> <!-- SĐT -->
+                </tr> <!-- Đóng dòng -->
+            {% endfor %} <!-- Kết thúc vòng lặp -->
+        </table> <!-- Đóng bảng -->
+    {% else %} <!-- Nếu không có bác sĩ -->
+        <p class="clinic-empty">Chưa có bác sĩ nào được cấu hình trong hệ thống.</p> <!-- Thông báo -->
+    {% endif %} <!-- Kết thúc if -->
 
-    <p class="clinic-links">
-        <a href="{{ url_for('dang_nhap') }}">Về trang đăng nhập</a> |
-        <a href="{{ url_for('trang_benh_nhan') }}">Về trang bệnh nhân</a>
-    </p>
+    <p class="clinic-links"> <!-- Khối link điều hướng -->
+        <a href="{{ url_for('dang_nhap') }}">Về trang đăng nhập</a> | <!-- Link đăng nhập -->
+        <a href="{{ url_for('trang_benh_nhan') }}">Về trang bệnh nhân</a> <!-- Link trang bệnh nhân -->
+    </p> <!-- Đóng đoạn -->
 
-</body>
-</html>
+</body> <!-- Đóng body -->
+</html> <!-- Đóng html -->

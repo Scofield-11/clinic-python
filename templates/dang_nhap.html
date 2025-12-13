@@ -1,35 +1,35 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Đăng nhập</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<!DOCTYPE html> <!-- Khai báo tài liệu HTML5 -->
+<html lang="vi"> <!-- Mở thẻ html, ngôn ngữ tiếng Việt -->
+<head> <!-- Phần head (metadata, link CSS, title...) -->
+    <meta charset="UTF-8"> <!-- Thiết lập bảng mã UTF-8 để hiển thị tiếng Việt -->
+    <title>Đăng nhập</title> <!-- Tiêu đề tab trình duyệt -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> <!-- Nạp file CSS -->
 
-</head>
-<body>
-    <h2>Đăng nhập</h2>
+</head> <!-- Đóng head -->
+<body> <!-- Mở body (nội dung hiển thị) -->
+    <h2>Đăng nhập</h2> <!-- Tiêu đề trang -->
 
-    {% if loi %}
-        <ul style="color:red;">
-            {% for msg in loi %}
-                <li>{{ msg }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    {% if loi %} <!-- Nếu có danh sách lỗi -->
+        <ul style="color:red;"> <!-- Danh sách lỗi màu đỏ -->
+            {% for msg in loi %} <!-- Lặp từng thông báo lỗi -->
+                <li>{{ msg }}</li> <!-- In một lỗi -->
+            {% endfor %} <!-- Kết thúc vòng lặp -->
+        </ul> <!-- Đóng danh sách -->
+    {% endif %} <!-- Kết thúc điều kiện -->
 
-    <form method="post">
-        <label>Tên đăng nhập:</label><br>
-        <input type="text" name="ten_dang_nhap"><br><br>
+    <form method="post"> <!-- Form gửi dữ liệu bằng POST -->
+        <label>Tên đăng nhập:</label><br> <!-- Nhãn tên đăng nhập + xuống dòng -->
+        <input type="text" name="ten_dang_nhap"><br><br> <!-- Ô nhập tên đăng nhập -->
 
-        <label>Mật khẩu:</label><br>
-        <input type="password" name="mat_khau"><br><br>
+        <label>Mật khẩu:</label><br> <!-- Nhãn mật khẩu + xuống dòng -->
+        <input type="password" name="mat_khau"><br><br> <!-- Ô nhập mật khẩu -->
 
-        <button type="submit">Đăng nhập</button>
-    </form>
+        <button type="submit">Đăng nhập</button> <!-- Nút submit form -->
+    </form> <!-- Đóng form -->
 
-    <p class="center-link">
-        Chưa có tài khoản? <a href="{{ url_for('dang_ky') }}">Đăng ký</a>
-    </p>
+    <p class="center-link"> <!-- Đoạn chữ/link căn giữa -->
+        Chưa có tài khoản? <a href="{{ url_for('dang_ky') }}">Đăng ký</a> <!-- Link sang trang đăng ký -->
+    </p> <!-- Đóng đoạn -->
 
-</body>
-</html>
+</body> <!-- Đóng body -->
+</html> <!-- Đóng html -->

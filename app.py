@@ -397,5 +397,30 @@ def dat_lich():
     return render_template("dat_lich.html", ds_bac_si=ds_bac_si)
 
 
+    #---------Huỷ Lịch-----------
+@app.route("/huy-lich/<int:lich_hen_id>", methods=["POST"])
+def huy_lich(lich_hen_id):
+    if "account_id" not in session:
+        return redirect(url_for("dang_nhap"))
+
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            # chỉ huỷ lịch thuộc về tài khoản đang đăng nhập
+            cur.execute("""
+                UPDATE LICH_HEN lh
+                JOIN BENH_NHAN bn ON lh.PatientID = bn.PatientID
+                SET lh.TrangThai = 'HUY'
+                WHERE lh.LichHenID = %s
+                  AND bn.AccountID = %s
+                  AND lh.TrangThai IN ('CHO_XAC_NHAN', 'DA_XAC_NHAN')
+            """, (lich_hen_id, session["account_id"]))
+
+        conn.commit()
+    finally:
+        conn.close()
+
+    return redirect(url_for("trang_benh_nhan"))
+
 if __name__ == "__main__":
     app.run(debug=True)
