@@ -1,35 +1,55 @@
-<!DOCTYPE html> <!-- Khai báo tài liệu HTML5 -->
-<html lang="vi"> <!-- Mở thẻ html, ngôn ngữ tiếng Việt -->
-<head> <!-- Phần head (metadata, link CSS, title...) -->
-    <meta charset="UTF-8"> <!-- Thiết lập bảng mã UTF-8 để hiển thị tiếng Việt -->
-    <title>Đăng nhập</title> <!-- Tiêu đề tab trình duyệt -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> <!-- Nạp file CSS -->
+{% extends "base.html" %}
 
-</head> <!-- Đóng head -->
-<body> <!-- Mở body (nội dung hiển thị) -->
-    <h2>Đăng nhập</h2> <!-- Tiêu đề trang -->
+{% block title %}
+Đăng nhập
+{% endblock %}
 
-    {% if loi %} <!-- Nếu có danh sách lỗi -->
-        <ul style="color:red;"> <!-- Danh sách lỗi màu đỏ -->
-            {% for msg in loi %} <!-- Lặp từng thông báo lỗi -->
-                <li>{{ msg }}</li> <!-- In một lỗi -->
-            {% endfor %} <!-- Kết thúc vòng lặp -->
-        </ul> <!-- Đóng danh sách -->
-    {% endif %} <!-- Kết thúc điều kiện -->
+{% block content %}
+<div class="card auth">
 
-    <form method="post"> <!-- Form gửi dữ liệu bằng POST -->
-        <label>Tên đăng nhập:</label><br> <!-- Nhãn tên đăng nhập + xuống dòng -->
-        <input type="text" name="ten_dang_nhap"><br><br> <!-- Ô nhập tên đăng nhập -->
+  <div class="card__header">
+    <h1 class="h1">Đăng nhập</h1>
+    <p class="muted">Vui lòng nhập thông tin để truy cập hệ thống</p>
+  </div>
 
-        <label>Mật khẩu:</label><br> <!-- Nhãn mật khẩu + xuống dòng -->
-        <input type="password" name="mat_khau"><br><br> <!-- Ô nhập mật khẩu -->
+  {% if loi %}
+    <ul class="alert">
+      {% for msg in loi %}
+        <li>{{ msg }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
-        <button type="submit">Đăng nhập</button> <!-- Nút submit form -->
-    </form> <!-- Đóng form -->
+  <form method="post" class="form">
 
-    <p class="center-link"> <!-- Đoạn chữ/link căn giữa -->
-        Chưa có tài khoản? <a href="{{ url_for('dang_ky') }}">Đăng ký</a> <!-- Link sang trang đăng ký -->
-    </p> <!-- Đóng đoạn -->
+    <label class="label" for="ten_dang_nhap">Tên đăng nhập</label>
+    <input
+      class="input"
+      type="text"
+      id="ten_dang_nhap"
+      name="ten_dang_nhap"
+      required
+    >
 
-</body> <!-- Đóng body -->
-</html> <!-- Đóng html -->
+    <label class="label" for="mat_khau">Mật khẩu</label>
+    <input
+      class="input"
+      type="password"
+      id="mat_khau"
+      name="mat_khau"
+      required
+    >
+
+    <button type="submit" class="btn btn-primary">
+      Đăng nhập
+    </button>
+
+  </form>
+
+  <div class="auth__footer">
+    <span class="muted">Chưa có tài khoản?</span>
+    <a class="link" href="{{ url_for('dang_ky') }}">Đăng ký</a>
+  </div>
+
+</div>
+{% endblock %}

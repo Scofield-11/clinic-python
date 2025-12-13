@@ -1,302 +1,412 @@
-/* Định dạng chung cho toàn trang */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #ffffff;
-    margin: 0;
-    padding: 0;
+/* ===== BẢNG MÀU ===== */
+:root{
+  --bg-main: #f4f8fd;
+  --bg-card: #ffffff;
+
+  --blue: #2563eb;
+  --blue-soft: #eaf1ff;
+  --blue-hover: #1d4ed8;
+
+  --green: #22c55e;
+  --green-soft: #ecfdf5;
+
+  --red: #ef4444;
+  --red-soft: #fef2f2;
+
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+
+  --border: #e5e7eb;
+
+  --shadow-main: 0 12px 30px rgba(15, 23, 42, 0.08);
+  --shadow-soft: 0 6px 16px rgba(15, 23, 42, 0.06);
+
+  --radius: 16px;
 }
 
-/* Tiêu đề (h1, h2) đặt giữa */
-h2 {
-    text-align: center;
-    color: #333;
+*{ box-sizing: border-box; }
+
+html, body{ height: 100%; }
+
+/* ===== NỀN TOÀN TRANG ===== */
+body{
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: var(--text-main);
+
+  /* BACKGROUND NHIỀU MÀU – CÓ CHIỀU SÂU */
+  background:
+    radial-gradient(800px 500px at 10% 10%, #c7d2fe 0%, transparent 60%),
+    radial-gradient(700px 450px at 90% 15%, #bbf7d0 0%, transparent 55%),
+    radial-gradient(600px 400px at 50% 100%, #bae6fd 0%, transparent 60%),
+    linear-gradient(180deg, #f0f9ff, #f8fafc);
+
+  min-height: 100vh;
 }
 
-/* Khung chứa form */
-form {
-    width: 300px;
-    background: white;
-    padding: 20px 50px;
-    margin: 20px auto;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+/* ===== LINK ===== */
+a{
+  color: var(--blue);
+  text-decoration: none;
+}
+a:hover{ text-decoration: underline; }
+
+/* ===== KHUNG APP ===== */
+.app-shell{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Input (ô nhập dữ liệu) */
-input, select, textarea {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.container{
+  width: min(1100px, 92vw);
+  margin: 18px auto 30px auto;
 }
 
-/* Nút bấm */
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+/* ===== TOPBAR ===== */
+.topbar{
+  width: min(1100px, 92vw);
+  margin: 18px auto 0 auto;
+  padding: 14px 16px;
+
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(10px);
+
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }
 
-button:hover {
-    background-color: #45a049;
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-/* Liên kết (Đăng ký / Đăng nhập) */
-a {
-    color: #0066cc;
-    text-decoration: none;
+.brand__logo{
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
-a:hover {
-    text-decoration: underline;
+.brand__logo img{
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
 }
 
-.center-link {
-    text-align: center;
-    margin-top: 15px;
-    font-size: 16px;
-    color: white;
+
+.brand__name{
+  font-weight: 800;
+  font-size: 16px;
+}
+.brand__sub{
+  font-size: 12px;
+  color: var(--text-muted);
 }
 
-.center-link a {
-    color: rgb(135, 149, 251);
-    font-weight: bold;
+.topbar__actions{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.center-link a:hover {
-    text-decoration: underline;
+/* ===== FOOTER ===== */
+.footer{
+  margin-top: auto;
+  width: min(1100px, 92vw);
+  margin-left: auto;
+  margin-right: auto;
+  padding: 18px 0 22px 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
 }
 
-body > p:last-of-type {
-    text-align: center;
-    color: rgb(11, 3, 3);
+/* ===== CARD ===== */
+.card{
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-main);
+  padding: 18px;
 }
 
-body > p:last-of-type a {
-    color: rgb(138, 129, 232);
-    font-weight: bold;
+/* ===== HEADER TRONG CARD ===== */
+.card__header{
+  margin-bottom: 12px;
+}
+.card__header--row{
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-/* ===== TRANG BỆNH NHÂN ===== */
-.patient-page {
-    font-family: Arial, sans-serif;
-    background-color: #f4f7fb;
-    margin: 0;
-    padding: 24px;
+/* ===== TEXT ===== */
+.h1{
+  margin: 0;
+  font-size: 22px;
+}
+.muted{
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--text-muted);
 }
 
-/* Khung chính */
-.patient-container {
-    max-width: 1000px;
-    margin: 0 auto;
+/* ===== AUTH CARD ===== */
+.auth{
+  width: min(520px, 92vw);
+  margin: 20px auto;
+}
+.auth--wide{
+  width: min(860px, 92vw);
 }
 
-/* Header trên cùng */
-.patient-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+.auth__footer{
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  display: flex;
+  justify-content: center;
+  gap: 8px;
 }
 
-.patient-header h1 {
-    margin: 0;
-    color: #2c3e50;
+/* ===== FORM ===== */
+.form{ margin-top: 12px; }
+
+.label{
+  display: block;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 10px 0 6px 0;
 }
 
-.patient-subtitle {
-    margin: 4px 0 0 0;
-    color: #7f8c8d;
-    font-size: 14px;
+.input{
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  font-size: 14px;
 }
 
-/* Nhóm nút bên phải */
-.patient-header-actions {
-    display: flex;
-    gap: 8px;
+.input:focus{
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.15);
 }
 
-/* Nút chung */
-.btn {
-    display: inline-block;
-    padding: 8px 14px;
-    border-radius: 4px;
-    font-size: 14px;
-    text-decoration: none;
-    cursor: pointer;
+.form--grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 14px;
+}
+.field--full{ grid-column: 1 / -1; }
+
+.row{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
 }
 
-/* Nút xanh */
-.btn.btn-secondary {
-    background-color: #2ecc71;
-    color: #fff;
-    border: none;
+/* ===== ALERT ===== */
+.alert{
+  background: var(--red-soft);
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 10px 12px;
+  border-radius: 14px;
+  margin-top: 12px;
+}
+.alert li{ margin-left: 18px; }
+
+/* ===== BUTTON ===== */
+.btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: 14px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-.btn.btn-secondary:hover {
-    background-color: #27ae60;
+.btn-primary{
+  background: linear-gradient(180deg, var(--blue), var(--blue-hover));
+  color: #fff;
+  box-shadow: 0 10px 18px rgba(37,99,235,0.25);
 }
 
-/* Nút viền xám */
-.btn.btn-outline {
-    background-color: transparent;
-    color: #2c3e50;
-    border: 1px solid #bdc3c7;
+.btn-outline{
+  background: #fff;
+  border: 1px solid var(--border);
+  color: var(--text-main);
 }
 
-.btn.btn-outline:hover {
-    background-color: #ecf0f1;
+.btn-ghost{
+  background: transparent;
+  color: var(--text-muted);
 }
 
-/* Nội dung chính */
-.patient-main {
-    margin-top: 10px;
+.btn-danger{
+  background: linear-gradient(180deg, var(--red), #dc2626);
+  color: #fff;
+  box-shadow: 0 10px 18px rgba(239,68,68,0.25);
 }
 
-/* Card trắng */
-.card {
-    background-color: #fff;
-    padding: 16px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+/* ===== TABLE ===== */
+.table-wrap{
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: #fff;
 }
 
-/* Card header */
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+.table{
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.card-header h2 {
-    margin: 0;
+.table thead{
+  background: var(--blue-soft);
 }
 
-/* Link nhỏ */
-.small-link {
-    font-size: 13px;
-    color: #0066cc;
-    text-decoration: none;
+.table th,
+.table td{
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
 }
 
-.small-link:hover {
-    text-decoration: underline;
+.table tr:hover{
+  background: #f8fbff;
 }
 
-/* Bảng lịch hẹn */
-.patient-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
+.t-center{ text-align: center; }
+
+/* ===== BADGE ===== */
+.badge{
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
 }
 
-.patient-table th,
-.patient-table td {
-    padding: 8px 10px;
-    border-bottom: 1px solid #ecf0f1;
-    text-align: left;
+.badge--CHO_XAC_NHAN{
+  background: #fff7ed;
+  color: #9a3412;
+}
+.badge--DA_XAC_NHAN{
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+.badge--HUY{
+  background: var(--red-soft);
+  color: var(--red);
+}
+.badge--DA_KHAM{
+  background: var(--green-soft);
+  color: var(--green);
 }
 
-.patient-table thead {
-    background-color: #f0f3f7;
+/* ===== INFO ===== */
+.info{
+  display: grid;
+  gap: 10px;
+}
+.info__row{
+  background: #fbfdff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+.info__label{
+  font-weight: 700;
+  color: var(--text-muted);
 }
 
-.patient-table tr:hover {
-    background-color: #f9fbff;
+/* ===== GRID ===== */
+.grid-2{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
 }
 
-/* Khi chưa có lịch hẹn */
-.empty-text {
-    font-size: 14px;
-    color: #7f8c8d;
-    margin: 0;
+/* ===== RESPONSIVE ===== */
+@media (max-width: 860px){
+  .grid-2{ grid-template-columns: 1fr; }
+  .form--grid{ grid-template-columns: 1fr; }
+  .row{ grid-template-columns: 1fr; }
+  .card__header--row{ flex-direction: column; }
+}
+/* ===== PHÓNG TO FORM ĐẶT LỊCH ===== */
+.auth-large {
+  max-width: 720px;     /* Form rộng hơn */
+  padding: 28px;        /* Thoáng hơn */
 }
 
-.empty-text a {
-    color: #0066cc;
-    text-decoration: none;
+.auth-large .input {
+  font-size: 15px;      /* Chữ to hơn */
+  padding: 14px 16px;   /* Input cao hơn */
 }
 
-.empty-text a:hover {
-    text-decoration: underline;
+.auth-large textarea.input {
+  min-height: 120px;    /* Ô lý do to hơn */
 }
 
-/* ===== TRANG THÔNG TIN PHÒNG KHÁM ===== */
-.clinic-title {
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 10px;
+
+
+/* ===== CĂN CHỈNH DÒNG 'CHƯA CÓ TÀI KHOẢN? ĐĂNG KÝ' ===== */
+.auth__footer{
+  display: flex;
+  align-items: center;      /* CĂN GIỮA THEO CHIỀU DỌC */
+  justify-content: center;
+  gap: 6px;                 /* Khoảng cách chữ - link */
+  margin-top: 14px;
+  font-size: 14px;
 }
 
-/* Khung thông tin phòng khám */
-.clinic-box {
-    background: white;
-    width: 360px;
-    margin: 0 auto 20px auto;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+.auth__footer span,
+.auth__footer a{
+  line-height: 1;           /* TRÁNH LỆCH BASELINE */
 }
 
-/* Bảng danh sách bác sĩ */
-.clinic-table {
-    width: 90%;
-    margin: 0 auto 20px auto;
-    border-collapse: collapse;
-    background: white;
+
+
+/* ===== FIX LỆCH "Chưa có tài khoản? Đăng ký" ===== */
+.auth__footer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+
+  /* reset mọi thứ có thể gây lệch */
+  margin: 12px 0 0 0;
+  padding: 10px 0 0 0;
+  line-height: 1;
 }
 
-.clinic-table th,
-.clinic-table td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: left;
-    font-size: 14px;
+.auth__footer .muted{
+  margin: 0 !important;        /* QUAN TRỌNG: .muted đang có margin-top */
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
-.clinic-table th {
-    background-color: #e8eef5;
-}
-
-/* Khi chưa có bác sĩ */
-.clinic-empty {
-    text-align: center;
-    color: #666;
-    margin-top: 10px;
-}
-
-/* Link dưới cùng */
-.clinic-links {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* ===== FIX CỘT THAO TÁC ===== */
-.action-cell {
-    text-align: center;
-    padding: 8px;
-    background: none;
-}
-
-.patient-table .action-cell form {
-    width: auto;
-    padding: 0;
-    margin: 0;
-    background: none;
-    box-shadow: none;
-    border-radius: 0;
-    display: inline-block;
-}
-
-.patient-table button,
-.patient-table .btn {
-    width: auto;
-    padding: 6px 12px;
+.auth__footer .link{
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }

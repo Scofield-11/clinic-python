@@ -1,50 +1,78 @@
-<!DOCTYPE html> <!-- Khai báo HTML5 -->
-<html lang="vi"> <!-- Mở trang tiếng Việt -->
-<head> <!-- Phần head -->
-    <meta charset="UTF-8"> <!-- UTF-8 -->
-    <title>Thông tin phòng khám</title> <!-- Tiêu đề -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> <!-- Link CSS -->
-</head> <!-- Đóng head -->
-<body> <!-- Mở body -->
+{% extends "base.html" %}
 
-    <h2 class="clinic-title">Thông tin phòng khám</h2> <!-- Tiêu đề -->
+{% block title %}
+Thông tin phòng khám
+{% endblock %}
 
-    <div class="clinic-box"> <!-- Khung thông tin phòng khám -->
-        <p><strong>Tên phòng khám:</strong> {{ thong_tin.ten }}</p> <!-- Tên phòng khám -->
-        <p><strong>Địa chỉ:</strong> {{ thong_tin.dia_chi }}</p> <!-- Địa chỉ -->
-        <p><strong>Số điện thoại:</strong> {{ thong_tin.so_dien_thoai }}</p> <!-- SĐT -->
-        <p><strong>Giờ làm việc:</strong> {{ thong_tin.gio_lam_viec }}</p> <!-- Giờ làm việc -->
-    </div> <!-- Đóng box -->
+{% block top_actions %}
+  <a class="btn btn-ghost" href="{{ url_for('trang_benh_nhan') }}">← Trang bệnh nhân</a>
+{% endblock %}
 
-    <h2 class="clinic-title">Danh sách bác sĩ</h2> <!-- Tiêu đề danh sách bác sĩ -->
+{% block content %}
+<div class="grid-2">
 
-    {% if ds_bac_si %} <!-- Nếu có bác sĩ -->
-        <table class="clinic-table"> <!-- Bảng bác sĩ -->
-            <tr> <!-- Hàng tiêu đề -->
-                <th>Mã</th> <!-- Cột mã -->
-                <th>Họ tên</th> <!-- Cột họ tên -->
-                <th>Chuyên khoa</th> <!-- Cột chuyên khoa -->
-                <th>Kinh nghiệm</th> <!-- Cột kinh nghiệm -->
-                <th>Số điện thoại</th> <!-- Cột số điện thoại -->
-            </tr> <!-- Đóng hàng -->
-            {% for bs in ds_bac_si %} <!-- Lặp danh sách bác sĩ -->
-                <tr> <!-- Dòng dữ liệu -->
-                    <td>{{ bs.BacSiID }}</td> <!-- Mã bác sĩ -->
-                    <td>{{ bs.HoTen }}</td> <!-- Tên bác sĩ -->
-                    <td>{{ bs.TenChuyenKhoa }}</td> <!-- Chuyên khoa -->
-                    <td>{{ bs.KinhNghiemNam }} năm</td> <!-- Kinh nghiệm -->
-                    <td>{{ bs.SoDienThoai }}</td> <!-- SĐT -->
-                </tr> <!-- Đóng dòng -->
-            {% endfor %} <!-- Kết thúc vòng lặp -->
-        </table> <!-- Đóng bảng -->
-    {% else %} <!-- Nếu không có bác sĩ -->
-        <p class="clinic-empty">Chưa có bác sĩ nào được cấu hình trong hệ thống.</p> <!-- Thông báo -->
-    {% endif %} <!-- Kết thúc if -->
+  <div class="card">
+    <div class="card__header">
+      <h1 class="h1">Thông tin phòng khám</h1>
+      <p class="muted">Thông tin liên hệ và giờ làm việc</p>
+    </div>
 
-    <p class="clinic-links"> <!-- Khối link điều hướng -->
-        <a href="{{ url_for('dang_nhap') }}">Về trang đăng nhập</a> | <!-- Link đăng nhập -->
-        <a href="{{ url_for('trang_benh_nhan') }}">Về trang bệnh nhân</a> <!-- Link trang bệnh nhân -->
-    </p> <!-- Đóng đoạn -->
+    <div class="info">
+      <div class="info__row">
+        <span class="info__label">Tên:</span>
+        <span>{{ thong_tin.ten }}</span>
+      </div>
+      <div class="info__row">
+        <span class="info__label">Địa chỉ:</span>
+        <span>{{ thong_tin.dia_chi }}</span>
+      </div>
+      <div class="info__row">
+        <span class="info__label">Số điện thoại:</span>
+        <span>{{ thong_tin.so_dien_thoai }}</span>
+      </div>
+      <div class="info__row">
+        <span class="info__label">Giờ làm việc:</span>
+        <span>{{ thong_tin.gio_lam_viec }}</span>
+      </div>
+    </div>
+  </div>
 
-</body> <!-- Đóng body -->
-</html> <!-- Đóng html -->
+  <div class="card">
+    <div class="card__header">
+      <h1 class="h1">Danh sách bác sĩ</h1>
+      <p class="muted">Bác sĩ hiện có trong hệ thống</p>
+    </div>
+
+    {% if ds_bac_si %}
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Mã</th>
+              <th>Họ tên</th>
+              <th>Chuyên khoa</th>
+              <th>Kinh nghiệm</th>
+              <th>SĐT</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for bs in ds_bac_si %}
+              <tr>
+                <td>{{ bs.BacSiID }}</td>
+                <td>{{ bs.HoTen }}</td>
+                <td>{{ bs.TenChuyenKhoa }}</td>
+                <td>{{ bs.KinhNghiemNam }} năm</td>
+                <td>{{ bs.SoDienThoai }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="muted">Chưa có bác sĩ nào.</p>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

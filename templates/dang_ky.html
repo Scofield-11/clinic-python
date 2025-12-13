@@ -1,58 +1,138 @@
-<!DOCTYPE html> <!-- Khai báo HTML5 -->
-<html lang="vi"> <!-- Mở trang HTML tiếng Việt -->
-<head> <!-- Phần head -->
-    <meta charset="UTF-8"> <!-- UTF-8 để hiển thị tiếng Việt -->
-    <title>Đăng ký tài khoản</title> <!-- Tiêu đề trang -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> <!-- Link CSS -->
+{% extends "base.html" %}
 
-</head> <!-- Đóng head -->
-<body> <!-- Mở body -->
-    <h2>Đăng ký tài khoản</h2> <!-- Tiêu đề -->
+{% block title %}
+Đăng ký
+{% endblock %}
 
-    {% if loi %} <!-- Nếu có lỗi -->
-        <ul style="color:red;"> <!-- Danh sách lỗi màu đỏ -->
-            {% for msg in loi %} <!-- Lặp qua các lỗi -->
-                <li>{{ msg }}</li> <!-- Hiển thị 1 lỗi -->
-            {% endfor %} <!-- Kết thúc vòng lặp -->
-        </ul> <!-- Đóng danh sách -->
-    {% endif %} <!-- Kết thúc if -->
+{% block content %}
+<div class="card auth auth--wide">
 
-    <form method="post"> <!-- Form đăng ký gửi POST -->
-        <label>Tên đăng nhập</label><br> <!-- Nhãn tên đăng nhập -->
-        <input type="text" name="ten_dang_nhap"><br><br> <!-- Ô nhập tên đăng nhập -->
+  <div class="card__header">
+    <h1 class="h1">Đăng ký tài khoản</h1>
+    <p class="muted">Vui lòng nhập đầy đủ thông tin để tạo tài khoản</p>
+  </div>
 
-        <label>Mật khẩu:</label><br> <!-- Nhãn mật khẩu -->
-        <input type="password" name="mat_khau"><br><br> <!-- Ô nhập mật khẩu -->
+  {% if loi %}
+    <ul class="alert">
+      {% for msg in loi %}
+        <li>{{ msg }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
-        <label>Nhập lại mật khẩu:</label><br> <!-- Nhãn xác nhận mật khẩu -->
-        <input type="password" name="xac_nhan_mat_khau"><br><br> <!-- Ô nhập xác nhận -->
+  <form method="post" class="form form--grid">
 
-        <label>Họ tên:</label><br> <!-- Nhãn họ tên -->
-        <input type="text" name="ho_ten"><br><br> <!-- Ô nhập họ tên -->
+    <div class="field">
+      <label class="label" for="ten_dang_nhap">Tên đăng nhập</label>
+      <input
+        class="input"
+        type="text"
+        id="ten_dang_nhap"
+        name="ten_dang_nhap"
+        required
+      >
+    </div>
 
-        <label>Email:</label><br> <!-- Nhãn email -->
-        <input type="email" name="email"><br><br>  <!-- Ô nhập email -->
-         
-        <label>Số điện thoại:</label><br> <!-- Nhãn số điện thoại -->
-        <input type="text" name="so_dien_thoai"><br><br> <!-- Ô nhập số điện thoại -->
+    <div class="field">
+      <label class="label" for="email">Email</label>
+      <input
+        class="input"
+        type="email"
+        id="email"
+        name="email"
+        required
+      >
+    </div>
 
-        <label>Ngày sinh:</label><br> <!-- Nhãn ngày sinh -->
-        <input type="date" name="ngay_sinh"><br><br> <!-- Ô chọn ngày sinh -->
+    <div class="field">
+      <label class="label" for="mat_khau">Mật khẩu</label>
+      <input
+        class="input"
+        type="password"
+        id="mat_khau"
+        name="mat_khau"
+        required
+      >
+    </div>
 
-        <label>Giới tính:</label><br> <!-- Nhãn giới tính -->
-        <select name="gioi_tinh"> <!-- Dropdown chọn giới tính -->
-            <option value="">--Chọn--</option> <!-- Option mặc định -->
-            <option value="NAM">Nam</option> <!-- Option Nam -->
-            <option value="NU">Nữ</option> <!-- Option Nữ -->
-            <option value="KHAC">Khác</option> <!-- Option Khác -->
-        </select><br><br> <!-- Đóng select + xuống dòng -->
+    <div class="field">
+      <label class="label" for="xac_nhan_mat_khau">Nhập lại mật khẩu</label>
+      <input
+        class="input"
+        type="password"
+        id="xac_nhan_mat_khau"
+        name="xac_nhan_mat_khau"
+        required
+      >
+    </div>
 
-        <label>Địa chỉ:</label><br> <!-- Nhãn địa chỉ -->
-        <textarea name="dia_chi"></textarea><br><br> <!-- Ô nhập địa chỉ -->
+    <div class="field">
+      <label class="label" for="ho_ten">Họ tên</label>
+      <input
+        class="input"
+        type="text"
+        id="ho_ten"
+        name="ho_ten"
+        required
+      >
+    </div>
 
-        <button type="submit">Đăng ký</button> <!-- Nút đăng ký -->
-    </form> <!-- Đóng form -->
+    <div class="field">
+      <label class="label" for="so_dien_thoai">Số điện thoại</label>
+      <input
+        class="input"
+        type="text"
+        id="so_dien_thoai"
+        name="so_dien_thoai"
+      >
+    </div>
 
-    <p>Đã có tài khoản? <a href="{{ url_for('dang_nhap') }}">Đăng nhập</a></p> <!-- Link sang đăng nhập -->
-</body> <!-- Đóng body -->
-</html> <!-- Đóng html -->
+    <div class="field">
+      <label class="label" for="ngay_sinh">Ngày sinh</label>
+      <input
+        class="input"
+        type="date"
+        id="ngay_sinh"
+        name="ngay_sinh"
+      >
+    </div>
+
+    <div class="field">
+      <label class="label" for="gioi_tinh">Giới tính</label>
+      <select
+        class="input"
+        id="gioi_tinh"
+        name="gioi_tinh"
+      >
+        <option value="">-- Chọn --</option>
+        <option value="NAM">Nam</option>
+        <option value="NU">Nữ</option>
+        <option value="KHAC">Khác</option>
+      </select>
+    </div>
+
+    <div class="field field--full">
+      <label class="label" for="dia_chi">Địa chỉ</label>
+      <textarea
+        class="input"
+        id="dia_chi"
+        name="dia_chi"
+        rows="3"
+      ></textarea>
+    </div>
+
+    <div class="field field--full">
+      <button type="submit" class="btn btn-primary">
+        Tạo tài khoản
+      </button>
+    </div>
+
+  </form>
+
+  <div class="auth__footer">
+    <span class="muted">Đã có tài khoản?</span>
+    <a class="link" href="{{ url_for('dang_nhap') }}">Đăng nhập</a>
+  </div>
+
+</div>
+{% endblock %}
