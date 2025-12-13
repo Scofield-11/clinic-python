@@ -28,11 +28,10 @@ Lịch hẹn của tôi
       <table class="table">
         <thead>
           <tr>
-            <th>Bác sĩ</th>
-            <th>Ngày</th>
-            <th>Giờ</th>
+            <th class="t-center">Bác sĩ</th>
+            <th class="t-center">Ngày</th>
+            <th class="t-center">Giờ</th>
             <th class="t-center">Trạng thái</th>
-
             <th class="t-center">Thao tác</th>
           </tr>
         </thead>
@@ -40,9 +39,9 @@ Lịch hẹn của tôi
         <tbody>
         {% for lh in lich_hen %}
           <tr>
-            <td>{{ lh.TenBacSi }}</td>
-            <td>{{ lh.NgayKham }}</td>
-            <td>{{ lh.GioKham }}</td>
+            <td class="t-center">{{ lh.TenBacSi }}</td>
+            <td class="t-center">{{ lh.NgayKham }}</td>
+            <td class="t-center">{{ lh.GioKham }}</td>
             <td class="t-center">
               <span class="badge badge--{{ lh.TrangThai }}">
                 {% if lh.TrangThai == 'CHO_XAC_NHAN' %}
