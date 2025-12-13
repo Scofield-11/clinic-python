@@ -31,7 +31,8 @@ Lịch hẹn của tôi
             <th>Bác sĩ</th>
             <th>Ngày</th>
             <th>Giờ</th>
-            <th>Trạng thái</th>
+            <th class="t-center">Trạng thái</th>
+
             <th class="t-center">Thao tác</th>
           </tr>
         </thead>
@@ -42,9 +43,17 @@ Lịch hẹn của tôi
             <td>{{ lh.TenBacSi }}</td>
             <td>{{ lh.NgayKham }}</td>
             <td>{{ lh.GioKham }}</td>
-            <td>
+            <td class="t-center">
               <span class="badge badge--{{ lh.TrangThai }}">
-                {{ lh.TrangThai }}
+                {% if lh.TrangThai == 'CHO_XAC_NHAN' %}
+                  Chờ xác nhận
+                {% elif lh.TrangThai == 'DA_XAC_NHAN' %}
+                  Đã xác nhận
+                {% elif lh.TrangThai == 'DA_KHAM' %}
+                  Đã khám
+                {% elif lh.TrangThai == 'HUY' %}
+                  Đã huỷ
+                {% endif %}
               </span>
             </td>
             <td class="t-center">
