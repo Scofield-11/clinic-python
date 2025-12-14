@@ -1,11 +1,11 @@
 CREATE TABLE TAI_KHOAN (
     AccountID INT AUTO_INCREMENT PRIMARY KEY,
-    TenDangNhap VARCHAR(100) NOT NULL,   -- email hoặc SĐT
+    TenDangNhap VARCHAR(100) NOT NULL,
     MatKhau VARCHAR(255) NOT NULL,
     SoDienThoai VARCHAR(20),
     Email VARCHAR(100),
     VaiTro ENUM('BENH_NHAN', 'BAC_SI', 'ADMIN') NOT NULL,
-    TrangThai TINYINT DEFAULT 1,         -- 1: hoạt động, 0: khóa
+    TrangThai TINYINT DEFAULT 1,
     NgayTao DATETIME DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_TenDangNhap (TenDangNhap)
 );
@@ -28,7 +28,7 @@ CREATE TABLE CHUYEN_KHOA (
 
 CREATE TABLE BAC_SI (
     BacSiID INT AUTO_INCREMENT PRIMARY KEY,
-    AccountID INT NULL,  -- nếu sau này cho bác sĩ đăng nhập
+    AccountID INT NULL,
     ChuyenKhoaID INT NOT NULL,
     HoTen VARCHAR(100) NOT NULL,
     HocVan VARCHAR(255),

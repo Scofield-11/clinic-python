@@ -80,7 +80,7 @@ a:hover{ text-decoration: underline; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 12x;
 }
 
 .brand{
@@ -102,8 +102,8 @@ a:hover{ text-decoration: underline; }
 }
 
 .brand__logo img{
-  width: 70%;
-  height: 70%;
+  width: 80%;
+  height: 80%;
   object-fit: contain;
 }
 
@@ -242,6 +242,8 @@ a:hover{ text-decoration: underline; }
   border: none;
   font-size: 14px;
   cursor: pointer;
+  margin-top: 14px;
+  margin-bottom: 10px;
 }
 
 .btn-primary{
@@ -301,7 +303,7 @@ a:hover{ text-decoration: underline; }
 .badge{
   padding: 6px 12px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
 }
 
@@ -352,20 +354,7 @@ a:hover{ text-decoration: underline; }
   .row{ grid-template-columns: 1fr; }
   .card__header--row{ flex-direction: column; }
 }
-/* ===== PHÓNG TO FORM ĐẶT LỊCH ===== */
-.auth-large {
-  max-width: 720px;     /* Form rộng hơn */
-  padding: 28px;        /* Thoáng hơn */
-}
 
-.auth-large .input {
-  font-size: 15px;      /* Chữ to hơn */
-  padding: 14px 16px;   /* Input cao hơn */
-}
-
-.auth-large textarea.input {
-  min-height: 120px;    /* Ô lý do to hơn */
-}
 
 
 
