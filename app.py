@@ -256,6 +256,13 @@ def trang_benh_nhan():
             """
             cur.execute(sql, (account_id,))
             lich_hen = cur.fetchall()
+
+            # ĐỔI ĐỊNH DẠNG NGÀY: YYYY-MM-DD -> DD/MM/YYYY
+            for lh in lich_hen:
+                if lh["NgayKham"]:
+                    lh["NgayKham"] = lh["NgayKham"].strftime("%d/%m/%Y")
+
+            
     finally:
         conn.close()
 

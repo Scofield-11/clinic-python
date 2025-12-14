@@ -259,6 +259,7 @@ a:hover{ text-decoration: underline; }
 .btn-ghost{
   background: transparent;
   color: var(--text-muted);
+  color: #1316da;
 }
 
 .btn-danger{
