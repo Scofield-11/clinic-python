@@ -5,7 +5,6 @@ from flask import Flask, render_template, request, redirect, url_for, session
 #url_for: sinh URL từ tên hàm (không phải gõ chuỗi /dang-nhap thô).
 #session: chỗ để lưu thông tin đăng nhập trên server (dùng cookie mã hoá).
 import pymysql
-from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, date
 
 app = Flask(__name__)
@@ -21,28 +20,18 @@ def get_connection():
         cursorclass=pymysql.cursors.DictCursor
     )
     return conn
-#DictCursor giúp dòng dữ liệu trả về dạng dict:
-#ví dụ: row["TenDangNhap"] thay vì row[0].
-
-#execute(): chạy câu lệnh SQL
-#fetchone(): lấy 1 dòng dữ liệu duy nhất từ kết quả SELECT.
-#commit(): Lưu thay đổi vào database
 #cur.lastrowid: Lấy ID của dòng vừa INSERT
 
 
-# Trang gốc: chuyển tới đăng nhập
 @app.route("/")
 def trang_chu():
     return redirect(url_for("dang_nhap"))
 
-
-# -------- ĐĂNG KÝ --------
 @app.route("/dang-ky", methods=["GET", "POST"])
 def dang_ky():
     if request.method == "GET":
         return render_template("dang_ky.html")
 
-    # POST: xử lý dữ liệu form
     ten_dang_nhap = request.form.get("ten_dang_nhap", "").strip()
     mat_khau = request.form.get("mat_khau", "")
     xac_nhan = request.form.get("xac_nhan_mat_khau", "")
@@ -54,7 +43,6 @@ def dang_ky():
     dia_chi = request.form.get("dia_chi", "").strip()
 
     loi = []
-    # ==== validate cơ bản ====
     if not ten_dang_nhap:
         loi.append("Tên đăng nhập không được để trống.")
     if not ho_ten:
@@ -65,28 +53,17 @@ def dang_ky():
         loi.append("Mật khẩu phải có ít nhất 6 ký tự.")
     if mat_khau != xac_nhan:
         loi.append("Mật khẩu và xác nhận mật khẩu không trùng khớp.")
-
     if not so_dien_thoai:
         loi.append("Số điện thoại không được để trống.")
-    elif len(so_dien_thoai) < 9 or len(so_dien_thoai) > 11:
-        loi.append("Số điện thoại không hợp lệ (9–11 số).")
-
-    if email:
-        # nếu nhập email thì kiểm tra định dạng
-        import re
-        pattern = r"^[^@]+@[^@]+\.[^@]+$"
-        if not re.match(pattern, email):
-            loi.append("Email không hợp lệ.")
-    else:
+    if not email:
         loi.append("Email không được để trống.")
-
+    
     if loi:
         return render_template("dang_ky.html", loi=loi)
 
     conn = get_connection()
     try:
         with conn.cursor() as cur:
-            # ==== kiểm tra trùng tên đăng nhập ====
             cur.execute(
                 "SELECT AccountID FROM TAI_KHOAN WHERE TenDangNhap=%s",
                 (ten_dang_nhap,)
@@ -95,7 +72,6 @@ def dang_ky():
                 loi.append("Tên đăng nhập đã tồn tại.")
                 return render_template("dang_ky.html", loi=loi)
 
-            # ==== kiểm tra trùng SĐT ====
             cur.execute(
                 "SELECT AccountID FROM TAI_KHOAN WHERE SoDienThoai=%s",
                 (so_dien_thoai,)
@@ -104,7 +80,6 @@ def dang_ky():
                 loi.append("Số điện thoại đã được sử dụng.")
                 return render_template("dang_ky.html", loi=loi)
 
-            # ==== kiểm tra trùng Email ====
             cur.execute(
                 "SELECT AccountID FROM TAI_KHOAN WHERE Email=%s",
                 (email,)
@@ -113,19 +88,14 @@ def dang_ky():
                 loi.append("Email đã được sử dụng.")
                 return render_template("dang_ky.html", loi=loi)
 
-            # ==== mã hóa mật khẩu ====
-            mat_khau_hash = generate_password_hash(mat_khau)
-
-            # ==== tạo tài khoản ====
             sql_tk = """
                 INSERT INTO TAI_KHOAN 
                     (TenDangNhap, MatKhau, SoDienThoai, Email, VaiTro, TrangThai)
                 VALUES (%s, %s, %s, %s, 'BENH_NHAN', 1)
             """
-            cur.execute(sql_tk, (ten_dang_nhap, mat_khau_hash, so_dien_thoai, email))
+            cur.execute(sql_tk, (ten_dang_nhap, mat_khau, so_dien_thoai, email))
             account_id = cur.lastrowid
 
-            # ==== tạo bản ghi bệnh nhân ====
             sql_bn = """
                 INSERT INTO BENH_NHAN (AccountID, HoTen, NgaySinh, GioiTinh, DiaChi)
                 VALUES (%s, %s, %s, %s, %s)
@@ -136,7 +106,6 @@ def dang_ky():
     finally:
         conn.close()
 
-    # đăng ký xong chuyển sang đăng nhập
     return redirect(url_for("dang_nhap"))
 
 
@@ -176,8 +145,7 @@ def dang_nhap():
         loi.append("Tài khoản đã bị khóa. Vui lòng liên hệ phòng khám.")
         return render_template("dang_nhap.html", loi=loi)
 
-    # kiểm tra mật khẩu đã mã hóa
-    if not check_password_hash(user["MatKhau"], mat_khau):
+    if user["MatKhau"] != mat_khau:
         loi.append("Sai tên đăng nhập hoặc mật khẩu.")
         return render_template("dang_nhap.html", loi=loi)
 
@@ -256,12 +224,6 @@ def trang_benh_nhan():
             """
             cur.execute(sql, (account_id,))
             lich_hen = cur.fetchall()
-
-            # ĐỔI ĐỊNH DẠNG NGÀY: YYYY-MM-DD -> DD/MM/YYYY
-            for lh in lich_hen:
-                if lh["NgayKham"]:
-                    lh["NgayKham"] = lh["NgayKham"].strftime("%d/%m/%Y")
-
             
     finally:
         conn.close()
@@ -273,10 +235,8 @@ def trang_benh_nhan():
     )
 
 
-# -------- ĐẶT LỊCH KHÁM --------
 @app.route("/dat-lich", methods=["GET", "POST"])
 def dat_lich():
-    # 1. Bắt buộc phải đăng nhập
     if "account_id" not in session:
         return redirect(url_for("dang_nhap"))
 
@@ -285,7 +245,6 @@ def dat_lich():
     conn = get_connection()
     try:
         with conn.cursor() as cur:
-            # 2. Lấy PatientID từ AccountID
             cur.execute(
                 "SELECT PatientID FROM BENH_NHAN WHERE AccountID = %s",
                 (account_id,)
@@ -295,17 +254,14 @@ def dat_lich():
                 return "Không tìm thấy thông tin bệnh nhân. Vui lòng liên hệ quản trị."
             patient_id = bn["PatientID"]
 
-            # 3. Lấy danh sách bác sĩ để hiện trong form
             cur.execute(
                 "SELECT BacSiID, HoTen FROM BAC_SI WHERE TrangThai = 1"
             )
             ds_bac_si = cur.fetchall()
 
-            # 4. Nếu chỉ mở trang lần đầu (GET) -> hiện form
             if request.method == "GET":
                 return render_template("dat_lich.html", ds_bac_si=ds_bac_si)
 
-            # 5. Nếu bấm nút Đặt lịch (POST) -> xử lý
             bac_si_id = request.form.get("bac_si", "").strip()
             ngay_kham = request.form.get("ngay_kham", "").strip()
             gio_kham = request.form.get("gio_kham", "").strip()
@@ -313,7 +269,6 @@ def dat_lich():
 
             loi = []
 
-            # ---- Validate cơ bản ----
             if not bac_si_id:
                 loi.append("Vui lòng chọn bác sĩ.")
             if not ngay_kham:
@@ -321,7 +276,6 @@ def dat_lich():
             if not gio_kham:
                 loi.append("Vui lòng chọn giờ khám.")
 
-            # Kiểm tra ngày không ở quá khứ
             ngay_obj = None
             if ngay_kham:
                 try:
@@ -331,15 +285,6 @@ def dat_lich():
                 except ValueError:
                     loi.append("Ngày khám không hợp lệ.")
 
-            # Kiểm tra định dạng giờ (chỉ cần đúng HH:MM)
-            gio_obj = None
-            if gio_kham:
-                try:
-                    gio_obj = datetime.strptime(gio_kham, "%H:%M").time()
-                except ValueError:
-                    loi.append("Giờ khám không hợp lệ.")
-
-            # Nếu có lỗi -> trả lại form + danh sách lỗi
             if loi:
                 return render_template(
                     "dat_lich.html",
@@ -347,7 +292,6 @@ def dat_lich():
                     loi=loi
                 )
 
-            # ---- Kiểm tra trùng lịch của bác sĩ ----
             sql_check_bs = """
                 SELECT LichHenID 
                 FROM LICH_HEN
@@ -361,7 +305,6 @@ def dat_lich():
                 loi.append("Khung giờ này bác sĩ đã có lịch. Vui lòng chọn giờ khác.")
                 return render_template("dat_lich.html", ds_bac_si=ds_bac_si, loi=loi)
 
-            # ---- (Thêm) Kiểm tra bệnh nhân không tự đặt trùng giờ với chính mình ----
             sql_check_bn = """
                 SELECT LichHenID 
                 FROM LICH_HEN
@@ -375,7 +318,6 @@ def dat_lich():
                 loi.append("Bạn đã có lịch khám ở khung giờ này.")
                 return render_template("dat_lich.html", ds_bac_si=ds_bac_si, loi=loi)
 
-            # ---- Lưu lịch hẹn mới ----
             sql_insert = """
                 INSERT INTO LICH_HEN 
                     (PatientID, BacSiID, NgayKham, GioKham, LyDoKham, TrangThai)
@@ -384,27 +326,13 @@ def dat_lich():
             cur.execute(sql_insert, (patient_id, bac_si_id, ngay_kham, gio_kham, ly_do))
             conn.commit()
 
-            # Đặt lịch xong quay về trang bệnh nhân để xem danh sách
             return redirect(url_for("trang_benh_nhan"))
 
     finally:
         conn.close()
 
-    # GET: hiện form
-    conn = get_connection()
-    try:
-        with conn.cursor() as cur:
-            cur.execute(
-                "SELECT BacSiID, HoTen FROM BAC_SI WHERE TrangThai=1"
-            )
-            ds_bac_si = cur.fetchall()
-    finally:
-        conn.close()
-
     return render_template("dat_lich.html", ds_bac_si=ds_bac_si)
 
-
-    #---------Huỷ Lịch-----------
 @app.route("/huy-lich/<int:lich_hen_id>", methods=["POST"])
 def huy_lich(lich_hen_id):
     if "account_id" not in session:
@@ -413,7 +341,6 @@ def huy_lich(lich_hen_id):
     conn = get_connection()
     try:
         with conn.cursor() as cur:
-            # chỉ huỷ lịch thuộc về tài khoản đang đăng nhập
             cur.execute("""
                 UPDATE LICH_HEN lh
                 JOIN BENH_NHAN bn ON lh.PatientID = bn.PatientID
