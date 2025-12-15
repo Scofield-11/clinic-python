@@ -1,27 +1,19 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-#render_template: trả về file HTML trong thư mục templates/.
-#request: đọc dữ liệu mà trình duyệt gửi lên (form, query string…).
-#redirect: trả về response kiểu “hãy đi sang URL khác”.
-#url_for: sinh URL từ tên hàm (không phải gõ chuỗi /dang-nhap thô).
-#session: chỗ để lưu thông tin đăng nhập trên server (dùng cookie mã hoá).
 import pymysql
 from datetime import datetime, date
 
 app = Flask(__name__)
-app.secret_key = "bi_mat_cua_ban"  # sau này có thể đổi
+app.secret_key = "06081983"
 
-# Hàm kết nối MySQL
 def get_connection():
     conn = pymysql.connect(
         host="localhost",
-        user="root",        # sửa nếu MySQL khác
-        password="",        # sửa nếu có mật khẩu
+        user="root",
+        password="",
         database="clinic_db",
         cursorclass=pymysql.cursors.DictCursor
     )
     return conn
-#cur.lastrowid: Lấy ID của dòng vừa INSERT
-
 
 @app.route("/")
 def trang_chu():
@@ -199,16 +191,12 @@ def thong_tin_phong_kham():
                            thong_tin=thong_tin,
                            ds_bac_si=ds_bac_si)
 
-
-# -------- TRANG BỆNH NHÂN --------
 @app.route("/trang-benh-nhan")
 def trang_benh_nhan():
     if "account_id" not in session:
         return redirect(url_for("dang_nhap"))
 
     account_id = session["account_id"]
-
-    # Lấy danh sách lịch hẹn của bệnh nhân
     conn = get_connection()
     lich_hen = []
     try:
@@ -224,6 +212,7 @@ def trang_benh_nhan():
             """
             cur.execute(sql, (account_id,))
             lich_hen = cur.fetchall()
+
             
     finally:
         conn.close()
