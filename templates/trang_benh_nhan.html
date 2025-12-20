@@ -69,6 +69,19 @@ Lịch hẹn của tôi
                     Huỷ
                   </button>
                 </form>
+              {% elif lh.TrangThai == 'DA_KHAM' %}
+                {% if lh.SoSao %}
+                    <span style="color: #f59e0b; font-weight: bold;">
+                        {{ lh.SoSao }} ⭐
+                    </span>
+                {% else %}
+                    <a href="{{ url_for('danh_gia', lich_hen_id=lh.LichHenID) }}" 
+                       class="btn btn-outline" 
+                       style="padding: 6px 12px; font-size: 12px; border-color: #f59e0b; color: #f59e0b;">
+                       Đánh giá
+                    </a>
+                {% endif %}
+              
               {% else %}
                 <span class="muted">-</span>
               {% endif %}

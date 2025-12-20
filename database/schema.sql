@@ -71,6 +71,7 @@ VALUES
 (5, 'BS. Vũ Quang Du', 'BS Tim mạch', 8, '0342961367'),
 (4, 'BS. Nguyễn Khắc Phát', 'BS Răng Hàm Mặt', 4, '0987654321');
 
+--US4
 INSERT INTO TAI_KHOAN (TenDangNhap, MatKhau, VaiTro, TrangThai) 
 VALUES ('admin', '11072006', 'ADMIN', 1);
 
@@ -104,3 +105,14 @@ WHERE HoTen = 'BS. Nguyễn Khắc Phát';
 
 ALTER TABLE LICH_HEN 
 MODIFY COLUMN TrangThai ENUM('CHO_XAC_NHAN','DA_XAC_NHAN','DA_KHAM','HUY','VANG_MAT') DEFAULT 'CHO_XAC_NHAN';
+
+--US5
+CREATE TABLE DANH_GIA (
+    DanhGiaID INT AUTO_INCREMENT PRIMARY KEY,
+    LichHenID INT NOT NULL,
+    SoSao INT NOT NULL CHECK (SoSao >= 1 AND SoSao <= 5),
+    BinhLuan TEXT,
+    NgayDanhGia DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (LichHenID) REFERENCES LICH_HEN(LichHenID),
+    UNIQUE KEY uq_LichHen_DanhGia (LichHenID) -- Đảm bảo mỗi lịch chỉ đánh giá 1 lần
+);

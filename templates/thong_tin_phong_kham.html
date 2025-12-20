@@ -52,7 +52,7 @@ Thông tin phòng khám
               <th>Họ tên</th>
               <th>Chuyên khoa</th>
               <th>Kinh nghiệm</th>
-              <th>SĐT</th>
+              <th>Đánh giá</th> <th>SĐT</th>
             </tr>
           </thead>
 
@@ -63,6 +63,16 @@ Thông tin phòng khám
                 <td>{{ bs.HoTen }}</td>
                 <td>{{ bs.TenChuyenKhoa }}</td>
                 <td>{{ bs.KinhNghiemNam }} năm</td>
+                
+                <td>
+                  {% if bs.LuotDanhGia > 0 %}
+                      <span style="color: #f59e0b; font-weight: bold;">{{ bs.DiemTrungBinh }} ⭐</span>
+                      <div class="muted" style="font-size: 11px;">({{ bs.LuotDanhGia }} lượt)</div>
+                  {% else %}
+                      <span class="muted" style="font-size: 12px;">Chưa có</span>
+                  {% endif %}
+                </td>
+
                 <td>{{ bs.SoDienThoai }}</td>
               </tr>
             {% endfor %}

@@ -126,7 +126,6 @@ def dang_nhap():
             """
             cur.execute(sql, (ten_dang_nhap,))
             user = cur.fetchone()
-            #SPRINT2
             if user:
                 user["HoTen"] = user["TenDangNhap"] 
                 if user["VaiTro"] == "BAC_SI":
@@ -154,28 +153,23 @@ def dang_nhap():
         loi.append("Sai tên đăng nhập hoặc mật khẩu.")
         return render_template("dang_nhap.html", loi=loi)
 
-    # Lưu session
     session["account_id"] = user["AccountID"]
     session["ten_dang_nhap"] = user["TenDangNhap"]
     session["vai_tro"] = user["VaiTro"]
     session["ho_ten"] = user["HoTen"]
-    #gemini
+
     if user["VaiTro"] == "BENH_NHAN":
         return redirect(url_for("trang_benh_nhan"))
     else:
-        # Nếu là BAC_SI hoặc ADMIN thì sang trang quản lý
         return redirect(url_for("quan_ly_lich_hen"))
-    #end
 
 
 
-# -------- LOGOUT --------
 @app.route("/dang-xuat")
 def dang_xuat():
     session.clear()
     return redirect(url_for("dang_nhap"))
 
-# -------- US03: XEM THÔNG TIN PHÒNG KHÁM & DANH SÁCH BÁC SĨ --------
 @app.route("/thong-tin-phong-kham")
 def thong_tin_phong_kham():
     conn = get_connection()
@@ -188,14 +182,23 @@ def thong_tin_phong_kham():
                     bs.HoTen,
                     bs.KinhNghiemNam,
                     bs.SoDienThoai,
-                    ck.TenChuyenKhoa
+                    ck.TenChuyenKhoa,
+                    COUNT(dg.DanhGiaID) as LuotDanhGia,
+                    IFNULL(AVG(dg.SoSao), 0) as DiemTrungBinh
                 FROM BAC_SI bs
                 JOIN CHUYEN_KHOA ck ON bs.ChuyenKhoaID = ck.ChuyenKhoaID
+                LEFT JOIN LICH_HEN lh ON bs.BacSiID = lh.BacSiID
+                LEFT JOIN DANH_GIA dg ON lh.LichHenID = dg.LichHenID
                 WHERE bs.TrangThai = 1
-                ORDER BY ck.TenChuyenKhoa, bs.HoTen
+                GROUP BY bs.BacSiID, bs.HoTen, bs.KinhNghiemNam, bs.SoDienThoai, ck.TenChuyenKhoa
+                ORDER BY DiemTrungBinh DESC, ck.TenChuyenKhoa
             """
             cur.execute(sql)
             ds_bac_si = cur.fetchall()
+            
+            for bs in ds_bac_si:
+                bs['DiemTrungBinh'] = round(bs['DiemTrungBinh'], 1)
+
     finally:
         conn.close()
 
@@ -222,10 +225,12 @@ def trang_benh_nhan():
         with conn.cursor() as cur:
             sql = """
                 SELECT lh.LichHenID, lh.NgayKham, lh.GioKham, lh.TrangThai,
-                       bs.HoTen AS TenBacSi
+                       bs.HoTen AS TenBacSi,
+                       dg.SoSao
                 FROM LICH_HEN lh
                 JOIN BENH_NHAN bn ON lh.PatientID = bn.PatientID
                 JOIN BAC_SI bs ON lh.BacSiID = bs.BacSiID
+                LEFT JOIN DANH_GIA dg ON lh.LichHenID = dg.LichHenID
                 WHERE bn.AccountID = %s
                 ORDER BY lh.NgayKham DESC, lh.GioKham DESC
             """
@@ -439,6 +444,57 @@ def cap_nhat_trang_thai(lich_hen_id, trang_thai):
         conn.close()
 
     return redirect(url_for("quan_ly_lich_hen"))
+
+@app.route("/danh-gia/<int:lich_hen_id>", methods=["GET", "POST"])
+def danh_gia(lich_hen_id):
+    if "account_id" not in session:
+        return redirect(url_for("dang_nhap"))
+
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            # 1. Kiểm tra Lịch hẹn có tồn tại và thuộc về user này không, và trạng thái phải là DA_KHAM
+            sql_check = """
+                SELECT lh.LichHenID, bs.HoTen as TenBacSi, lh.NgayKham
+                FROM LICH_HEN lh
+                JOIN BENH_NHAN bn ON lh.PatientID = bn.PatientID
+                JOIN BAC_SI bs ON lh.BacSiID = bs.BacSiID
+                WHERE lh.LichHenID = %s 
+                  AND bn.AccountID = %s
+                  AND lh.TrangThai = 'DA_KHAM'
+            """
+            cur.execute(sql_check, (lich_hen_id, session["account_id"]))
+            lich = cur.fetchone()
+
+            if not lich:
+                return "Lịch hẹn không hợp lệ hoặc chưa hoàn thành khám."
+
+            # 2. Kiểm tra xem đã đánh giá chưa (tránh spam F5)
+            cur.execute("SELECT DanhGiaID FROM DANH_GIA WHERE LichHenID = %s", (lich_hen_id,))
+            if cur.fetchone():
+                return "Bạn đã đánh giá lịch hẹn này rồi."
+
+            if request.method == "GET":
+                return render_template("danh_gia.html", lich=lich)
+
+            # Xử lý POST
+            so_sao = request.form.get("so_sao")
+            binh_luan = request.form.get("binh_luan", "").strip()
+
+            if not so_sao:
+                return "Vui lòng chọn số sao."
+
+            sql_insert = """
+                INSERT INTO DANH_GIA (LichHenID, SoSao, BinhLuan)
+                VALUES (%s, %s, %s)
+            """
+            cur.execute(sql_insert, (lich_hen_id, so_sao, binh_luan))
+            conn.commit()
+
+            return redirect(url_for("trang_benh_nhan"))
+    finally:
+        conn.close()
+
 
 if __name__ == "__main__":
     app.run(debug=True)
