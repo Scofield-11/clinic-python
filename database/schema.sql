@@ -116,3 +116,6 @@ CREATE TABLE DANH_GIA (
     FOREIGN KEY (LichHenID) REFERENCES LICH_HEN(LichHenID),
     UNIQUE KEY uq_LichHen_DanhGia (LichHenID) -- Đảm bảo mỗi lịch chỉ đánh giá 1 lần
 );
+
+ALTER TABLE BENH_NHAN 
+ADD COLUMN ShareToken VARCHAR(100) UNIQUE DEFAULT NULL;

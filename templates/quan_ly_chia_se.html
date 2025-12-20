@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Quản lý chia sẻ hồ sơ{% endblock %}
+
+{% block top_actions %}
+  <a class="btn btn-ghost" href="{{ url_for('benh_nhan.trang_benh_nhan') }}">← Quay lại</a>
+{% endblock %}
+
+{% block content %}
+<div class="card auth auth-large">
+    <div class="card__header">
+        <h1 class="h1">Chia sẻ hồ sơ y tế</h1>
+        <p class="muted">Tạo mã QR để bác sĩ khác có thể xem lịch sử khám của bạn.</p>
+    </div>
+
+    <div class="mt-15" style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+        {% if share_token %}
+            <div class="qr-layout">
+                <div class="qr-box">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ request.url_root }}ho-so-y-te/{{ share_token }}" alt="QR Code" width="150" height="150">
+                </div>
+
+                <div class="qr-content">
+                    <div class="share-status">
+                        <span class="share-status-dot">●</span>
+                        <span>Đang chia sẻ công khai</span>
+                    </div>
+                    
+                    <p class="muted text-sm" style="line-height: 1.5; margin-bottom: 15px;">
+                        Quét mã bên cạnh hoặc sao chép đường dẫn dưới đây để gửi cho bác sĩ.<br>
+                        Bất kỳ ai có đường dẫn này đều có thể xem lịch sử khám của bạn.
+                    </p>
+                    
+                    <div>
+                        <input type="text" class="qr-link-input"
+                               value="{{ request.url_root }}ho-so-y-te/{{ share_token }}" 
+                               readonly onclick="this.select()">
+                    </div>
+
+                    <form method="POST" action="{{ url_for('benh_nhan.tao_lien_ket_chia_se') }}">
+                        <input type="hidden" name="hanh_dong" value="huy">
+                        <button type="submit" class="btn btn-outline btn-sm" style="border-color: var(--red); color: var(--red);">
+                            Hủy chia sẻ / Vô hiệu hóa Link
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <div class="text-center" style="padding: 20px 0;">
+                <p class="muted mb-15">Hồ sơ của bạn hiện tại là <strong>Riêng tư</strong>.</p>
+                <form method="POST" action="{{ url_for('benh_nhan.tao_lien_ket_chia_se') }}">
+                    <input type="hidden" name="hanh_dong" value="tao">
+                    <button type="submit" class="btn btn-primary">
+                        + Tạo mã chia sẻ ngay
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}
-Quản lý lịch hẹn
-{% endblock %}
+{% block title %}Quản lý lịch hẹn{% endblock %}
 
 {% block top_actions %}
   <div class="user-info">
       Xin chào, <strong>{{ session.ho_ten }}</strong>
   </div>
-  <a class="btn btn-danger" href="{{ url_for('dang_xuat') }}">Đăng xuất</a>
+  <a class="btn btn-danger" href="{{ url_for('auth.dang_xuat') }}">Đăng xuất</a>
 {% endblock %}
 
 {% block content %}
@@ -41,12 +39,12 @@ Quản lý lịch hẹn
             <tr class="t-center">
               <td>{{ lh.LichHenID }}</td>
               <td>
-                <div style="font-weight: bold;">{{ lh.GioKham }}</div>
+                <div class="text-bold">{{ lh.GioKham }}</div>
                 <div class="muted">{{ lh.NgayKham }}</div>
               </td>
               <td>
-                <div style="font-weight: 700;">{{ lh.TenBenhNhan }}</div>
-                <div style="font-size: 12px; color: #64748b;">
+                <div class="text-bold">{{ lh.TenBenhNhan }}</div>
+                <div class="text-sm muted">
                     {{ lh.GioiTinh }} - {{ lh.NgaySinh }}
                 </div>
               </td>
@@ -68,39 +66,41 @@ Quản lý lịch hẹn
                   {% elif lh.TrangThai == 'DA_XAC_NHAN' %} Đã duyệt
                   {% elif lh.TrangThai == 'DA_KHAM' %} Đã khám
                   {% elif lh.TrangThai == 'HUY' %} Đã hủy
-                  {% elif lh.TrangThai == 'VANG_MAT' %} Vắng mặt {% else %} {{ lh.TrangThai }}
+                  {% elif lh.TrangThai == 'VANG_MAT' %} Vắng mặt 
+                  {% else %} {{ lh.TrangThai }}
                   {% endif %}
                 </span>
               </td>
               <td class="t-center">
-                <div style="display: flex; gap: 5px; justify-content: center;">
+                <div class="d-flex gap-5" style="justify-content: center;">
                     
-                    {# Nút DUYỆT: Chỉ hiện khi đang CHỜ XÁC NHẬN #}
+                    {# Nút DUYỆT #}
                     {% if lh.TrangThai == 'CHO_XAC_NHAN' %}
-                    <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='DA_XAC_NHAN') }}">
-                        <button type="submit" class="btn btn-primary" style="padding: 6px 10px; font-size: 12px;">Duyệt</button>
+                    <form method="POST" action="{{ url_for('bac_si.cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='DA_XAC_NHAN') }}">
+                        <button type="submit" class="btn btn-primary btn-sm">Duyệt</button>
                     </form>
                     {% endif %}
 
-                    {# Nút HOÀN THÀNH hoặc VẮNG MẶT: Hiện khi ĐÃ DUYỆT #}
+                    {# Nút HOÀN THÀNH hoặc VẮNG MẶT #}
                     {% if lh.TrangThai == 'DA_XAC_NHAN' %}
-                        <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='DA_KHAM') }}">
-                            <button type="submit" class="btn btn-outline" style="padding: 6px 10px; font-size: 12px; color: var(--green); border-color: var(--green);">
-                                Đã khám
-                            </button>
-                        </form>
+                        <button type="button" 
+                                class="btn btn-outline btn-sm" 
+                                style="color: var(--green); border-color: var(--green);"
+                                onclick="moFormKham('{{ lh.LichHenID }}', '{{ lh.TenBenhNhan }}')">
+                            Khám
+                        </button>
 
-                        <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='VANG_MAT') }}" onsubmit="return confirm('Xác nhận bệnh nhân vắng mặt?');">
-                            <button type="submit" class="btn btn-outline" style="padding: 6px 10px; font-size: 12px; color: #475569; border-color: #cbd5e1;">
+                        <form method="POST" action="{{ url_for('bac_si.cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='VANG_MAT') }}" onsubmit="return confirm('Xác nhận bệnh nhân vắng mặt?');" style="display: inline;">
+                            <button type="submit" class="btn btn-outline btn-sm" style="color: #475569; border-color: #cbd5e1;">
                                 Vắng mặt
                             </button>
                         </form>
                     {% endif %}
-
-                    {# Nút HỦY: Hiện khi chưa khám xong hoặc chưa hủy #}
+                    
+                    {# Nút HỦY #}
                     {% if lh.TrangThai in ['CHO_XAC_NHAN', 'DA_XAC_NHAN'] %}
-                    <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='HUY') }}" onsubmit="return confirm('Bạn chắc chắn muốn hủy lịch này?');">
-                        <button type="submit" class="btn btn-ghost" style="padding: 6px 10px; font-size: 12px; color: var(--red);">Hủy</button>
+                    <form method="POST" action="{{ url_for('bac_si.cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='HUY') }}" onsubmit="return confirm('Bạn chắc chắn muốn hủy lịch này?');">
+                        <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--red);">Hủy</button>
                     </form>
                     {% endif %}
                 </div>
@@ -116,6 +116,53 @@ Quản lý lịch hẹn
         {% endif %}
       </tbody>
     </table>
+
+    <div id="modalKham" class="modal">
+      <div class="card modal-content">
+          <span class="modal-close" onclick="dongModal()">&times;</span>
+          
+          <h2 class="h1 mb-15" style="font-size: 20px;">Kết quả khám bệnh</h2>
+          <p class="muted mb-20">Nhập chẩn đoán và toa thuốc cho bệnh nhân: <strong id="modalTenBN"></strong></p>
+
+          <form action="{{ url_for('bac_si.luu_ket_qua_kham') }}" method="POST">
+              <input type="hidden" name="lich_hen_id" id="modalLichHenID">
+
+              <div class="field">
+                  <label class="label">Chẩn đoán / Kết luận</label>
+                  <textarea class="input" name="chan_doan" rows="3" required placeholder="Ví dụ: Viêm họng cấp..."></textarea>
+              </div>
+
+              <div class="field">
+                  <label class="label">Toa thuốc / Chỉ định</label>
+                  <textarea class="input" name="toa_thuoc" rows="4" required placeholder="Ví dụ: Panadol 500mg (2 viên/ngày)..."></textarea>
+              </div>
+
+              <div class="d-flex gap-10 mt-15">
+                  <button type="submit" class="btn btn-primary" style="flex: 1;">Lưu & Hoàn thành</button>
+                  <button type="button" class="btn btn-outline" onclick="dongModal()" style="flex: 1;">Đóng</button>
+              </div>
+          </form>
+      </div>
+  </div>
+
+  <script>
+      function moFormKham(id, tenBenhNhan) {
+          document.getElementById('modalLichHenID').value = id;
+          document.getElementById('modalTenBN').innerText = tenBenhNhan;
+          document.getElementById('modalKham').style.display = 'block';
+      }
+      
+      function dongModal() {
+          document.getElementById('modalKham').style.display = 'none';
+      }
+
+      // Đóng modal khi click ra ngoài
+      window.onclick = function(event) {
+          if (event.target == document.getElementById('modalKham')) {
+              dongModal();
+          }
+      }
+  </script>
   </div>
 </div>
 {% endblock %}

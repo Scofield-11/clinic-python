@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hồ sơ sức khỏe điện tử</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="page-public">
+
+  <div class="container container--narrow">
+    
+    <div class="card public-header">
+        <div class="logo-circle">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
+        </div>
+        
+        <div class="header-text">
+            <h1 class="h1 text-blue" style="margin: 0; font-size: 18px;">Hồ Sơ Y Tế Trực Tuyến</h1>
+            <p class="muted" style="margin: 0; font-size: 13px;">Phòng khám Đa khoa Thuỷ Lợi</p>
+        </div>
+    </div>
+
+    <div class="card mb-20">
+        <div class="card__header">
+            <h2 class="h1 font-18">Thông tin hành chính</h2>
+        </div>
+        <div class="info">
+            <div class="info__row">
+                <span class="info__label">Họ tên:</span>
+                <span class="text-lg text-bold">{{ bn.HoTen }}</span>
+            </div>
+            <div class="row">
+                <div class="info__row">
+                    <span class="info__label">Ngày sinh:</span>
+                    <span>{{ bn.NgaySinh }}</span>
+                </div>
+                <div class="info__row">
+                    <span class="info__label">Giới tính:</span>
+                    <span>
+                        {% if bn.GioiTinh == 'NAM' %} Nam 
+                        {% elif bn.GioiTinh == 'NU' %} Nữ 
+                        {% else %} Khác {% endif %}
+                    </span>
+                </div>
+            </div>
+            <div class="info__row">
+                <span class="info__label">Địa chỉ:</span>
+                <span>{{ bn.DiaChi }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card__header">
+            <h2 class="h1 font-18">Lịch sử khám bệnh</h2>
+            <p class="muted">Danh sách các lần khám đã hoàn thành</p>
+        </div>
+
+        {% if ls %}
+            <div class="table-wrap">
+                <div class="timeline-container">
+                    {% for item in ls %}
+                    <div class="timeline-item">
+                        <div class="timeline-date">
+                            <div class="date-box">
+                                <span class="day">{{ item.NgayKham.split('/')[0] }}</span>
+                                <span class="month">Tháng {{ item.NgayKham.split('/')[1] }}</span>
+                                <span class="year">{{ item.NgayKham.split('/')[2] }}</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-content card">
+                            <div class="header-content">
+                                <h3 class="doc-name">{{ item.TenBacSi }}</h3>
+                                <span class="dept-name">{{ item.TenChuyenKhoa }}</span>
+                            </div>
+                            
+                            <div class="body-content">
+                                <div class="row-item">
+                                    <strong>Lý do:</strong> {{ item.LyDoKham }}
+                                </div>
+                                <div class="row-item highlight">
+                                    <strong>Chẩn đoán:</strong> {{ item.ChanDoan }}
+                                </div>
+                                {% if item.ToaThuoc %}
+                                <div class="prescription-box">
+                                    <strong>💊 Toa thuốc:</strong><br>
+                                    {{ item.ToaThuoc }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p>Chưa có lịch sử khám bệnh nào được ghi nhận.</p>
+            </div>
+        {% endif %}
+    </div>
+  </div>
+</body>
+</html>

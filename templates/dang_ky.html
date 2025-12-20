@@ -24,86 +24,42 @@
 
     <div class="field">
       <label class="label" for="ten_dang_nhap">Tên đăng nhập</label>
-      <input
-        class="input"
-        type="text"
-        id="ten_dang_nhap"
-        name="ten_dang_nhap"
-        required
-      >
+      <input class="input" type="text" id="ten_dang_nhap" name="ten_dang_nhap" required>
     </div>
 
     <div class="field">
       <label class="label" for="email">Email</label>
-      <input
-        class="input"
-        type="email"
-        id="email"
-        name="email"
-        required
-      >
+      <input class="input" type="email" id="email" name="email" required>
     </div>
 
     <div class="field">
       <label class="label" for="mat_khau">Mật khẩu</label>
-      <input
-        class="input"
-        type="password"
-        id="mat_khau"
-        name="mat_khau"
-        required
-      >
+      <input class="input" type="password" id="mat_khau" name="mat_khau" required>
     </div>
 
     <div class="field">
       <label class="label" for="xac_nhan_mat_khau">Nhập lại mật khẩu</label>
-      <input
-        class="input"
-        type="password"
-        id="xac_nhan_mat_khau"
-        name="xac_nhan_mat_khau"
-        required
-      >
+      <input class="input" type="password" id="xac_nhan_mat_khau" name="xac_nhan_mat_khau" required>
     </div>
 
     <div class="field">
       <label class="label" for="ho_ten">Họ tên</label>
-      <input
-        class="input"
-        type="text"
-        id="ho_ten"
-        name="ho_ten"
-        required
-      >
+      <input class="input" type="text" id="ho_ten" name="ho_ten" required>
     </div>
 
     <div class="field">
       <label class="label" for="so_dien_thoai">Số điện thoại</label>
-      <input
-        class="input"
-        type="text"
-        id="so_dien_thoai"
-        name="so_dien_thoai"
-      >
+      <input class="input" type="text" id="so_dien_thoai" name="so_dien_thoai">
     </div>
 
     <div class="field">
       <label class="label" for="ngay_sinh">Ngày sinh</label>
-      <input
-        class="input"
-        type="date"
-        id="ngay_sinh"
-        name="ngay_sinh"
-      >
+      <input class="input" type="date" id="ngay_sinh" name="ngay_sinh">
     </div>
 
     <div class="field">
       <label class="label" for="gioi_tinh">Giới tính</label>
-      <select
-        class="input"
-        id="gioi_tinh"
-        name="gioi_tinh"
-      >
+      <select class="input" id="gioi_tinh" name="gioi_tinh">
         <option value="">-- Chọn --</option>
         <option value="NAM">Nam</option>
         <option value="NU">Nữ</option>
@@ -113,12 +69,7 @@
 
     <div class="field field--full">
       <label class="label" for="dia_chi">Địa chỉ</label>
-      <textarea
-        class="input"
-        id="dia_chi"
-        name="dia_chi"
-        rows="3"
-      ></textarea>
+      <textarea class="input" id="dia_chi" name="dia_chi" rows="3"></textarea>
     </div>
 
     <div class="field field--full">
@@ -131,7 +82,7 @@
 
   <div class="auth__footer">
     <span class="muted">Đã có tài khoản?</span>
-    <a class="link" href="{{ url_for('dang_nhap') }}">Đăng nhập</a>
+    <a class="link" href="{{ url_for('auth.dang_nhap') }}">Đăng nhập</a>
   </div>
 
 </div>

@@ -175,6 +175,7 @@
 
 </div>
 {% endblock %}
+<!--end_dang_ky.html-->
 
 <!--dang_nhap.html-->
 
@@ -233,7 +234,48 @@
 
 </div>
 {% endblock %}
-<!--end_dang_ky.html-->
+<!--end_dang_nhap.html-->
+
+<!--danh_gia.html-->
+{% extends "base.html" %}
+
+{% block title %}Đánh giá bác sĩ{% endblock %}
+
+{% block content %}
+<div class="card auth">
+  <div class="card__header">
+    <h1 class="h1">Đánh giá dịch vụ</h1>
+    <p class="muted">Bác sĩ: <strong>{{ lich.TenBacSi }}</strong></p>
+    <p class="muted" style="font-size: 12px;">Ngày khám: {{ lich.NgayKham }}</p>
+  </div>
+
+  <form method="post" class="form">
+    <label class="label">Mức độ hài lòng</label>
+    <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+        <label><input type="radio" name="so_sao" value="5" checked> ⭐⭐⭐⭐⭐ (Tuyệt vời)</label><br>
+    </div>
+    <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+        <label><input type="radio" name="so_sao" value="4"> ⭐⭐⭐⭐ (Tốt)</label>
+    </div>
+    <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+        <label><input type="radio" name="so_sao" value="3"> ⭐⭐⭐ (Bình thường)</label>
+    </div>
+    <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+        <label><input type="radio" name="so_sao" value="2"> ⭐⭐ (Tệ)</label>
+    </div>
+    <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+        <label><input type="radio" name="so_sao" value="1"> ⭐ (Rất tệ)</label>
+    </div>
+
+    <label class="label" for="binh_luan">Nhận xét của bạn</label>
+    <textarea class="input" id="binh_luan" name="binh_luan" rows="4" placeholder="Bác sĩ khám như thế nào?"></textarea>
+
+    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+    <a href="{{ url_for('trang_benh_nhan') }}" class="btn btn-ghost">Quay lại</a>
+  </form>
+</div>
+{% endblock %}
+<!--end_danh_gia.html-->
 
 <!--dat_lich.html-->
 
@@ -303,6 +345,134 @@
 </div>
 {% endblock %}
 <!--end_dat_lich.html-->
+
+<!--ho_so_public.html-->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hồ sơ sức khỏe điện tử</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="page-public">
+
+  <div class="container container--narrow">
+    
+    <div class="card public-header">
+        <div class="logo-circle">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
+        </div>
+        <h1 class="h1 text-blue">Hồ Sơ Y Tế Trực Tuyến</h1>
+        <p class="muted">Phòng khám Đa khoa Thuỷ Lợi</p>
+    </div>
+
+    <div class="card mb-20">
+        <div class="card__header">
+            <h2 class="h1 font-18">Thông tin hành chính</h2>
+        </div>
+        <div class="info">
+            <div class="info__row">
+                <span class="info__label">Họ tên:</span>
+                <span class="text-lg text-bold">{{ bn.HoTen }}</span>
+            </div>
+            <div class="row">
+                <div class="info__row">
+                    <span class="info__label">Ngày sinh:</span>
+                    <span>{{ bn.NgaySinh }}</span>
+                </div>
+                <div class="info__row">
+                    <span class="info__label">Giới tính:</span>
+                    <span>
+                        {% if bn.GioiTinh == 'NAM' %} Nam 
+                        {% elif bn.GioiTinh == 'NU' %} Nữ 
+                        {% else %} Khác {% endif %}
+                    </span>
+                </div>
+            </div>
+            <div class="info__row">
+                <span class="info__label">Địa chỉ:</span>
+                <span>{{ bn.DiaChi }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card__header">
+            <h2 class="h1 font-18">Lịch sử khám bệnh</h2>
+            <p class="muted">Danh sách các lần khám đã hoàn thành</p>
+        </div>
+
+        {% if ls %}
+            <div class="table-wrap">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Ngày</th>
+                            <th>Bác sĩ</th>
+                            <th>Thông tin khám</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in ls %}
+                        <tr>
+                            <td class="col-top col-date">
+                                <div class="text-bold">{{ item.NgayKham }}</div>
+                                <div class="muted font-12">{{ item.TenChuyenKhoa }}</div>
+                            </td>
+
+                            <td class="col-top col-doc">
+                                <strong>{{ item.TenBacSi }}</strong>
+                                {% if item.DanhGiaCuaBenhNhan %}
+                                    <div class="rating-badge">
+                                        ★ Đã đánh giá
+                                    </div>
+                                {% endif %}
+                            </td>
+
+                            <td class="col-top">
+                                <div class="mb-8">
+                                    <span class="tag tag--gray">LÝ DO</span>
+                                    <span class="font-14">{{ item.LyDoKham }}</span>
+                                </div>
+
+                                {% if item.ChanDoan %}
+                                <div class="mb-8">
+                                    <span class="tag tag--blue">CHẨN ĐOÁN</span>
+                                    <span class="text-blue-dark font-medium">{{ item.ChanDoan }}</span>
+                                </div>
+                                {% endif %}
+
+                                {% if item.ToaThuoc %}
+                                <div>
+                                    <span class="tag tag--green">TOA THUỐC</span>
+                                    <div class="text-pre-line text-dark">{{ item.ToaThuoc }}</div>
+                                </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p>Chưa có lịch sử khám bệnh nào được ghi nhận.</p>
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="public-footer">
+        <p>Hồ sơ này được chia sẻ tự động từ hệ thống quản lý phòng khám.</p>
+        <p>Nếu bạn không phải là người được ủy quyền, vui lòng đóng trang này.</p>
+    </div>
+
+  </div>
+
+</body>
+</html>
+<!--end_ho_so_public.html-->
 
 <!--quan_ly_lich_hen.html-->
 
@@ -392,19 +562,20 @@ Quản lý lịch hẹn
 
                     {# Nút HOÀN THÀNH hoặc VẮNG MẶT: Hiện khi ĐÃ DUYỆT #}
                     {% if lh.TrangThai == 'DA_XAC_NHAN' %}
-                        <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='DA_KHAM') }}">
-                            <button type="submit" class="btn btn-outline" style="padding: 6px 10px; font-size: 12px; color: var(--green); border-color: var(--green);">
-                                Đã khám
-                            </button>
-                        </form>
+                        <button type="button" 
+                                class="btn btn-outline" 
+                                style="padding: 6px 10px; font-size: 12px; color: var(--green); border-color: var(--green);"
+                                onclick="moFormKham('{{ lh.LichHenID }}', '{{ lh.TenBenhNhan }}')">
+                            Khám
+                        </button>
 
-                        <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='VANG_MAT') }}" onsubmit="return confirm('Xác nhận bệnh nhân vắng mặt?');">
+                        <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='VANG_MAT') }}" onsubmit="return confirm('Xác nhận bệnh nhân vắng mặt?');" style="display: inline;">
                             <button type="submit" class="btn btn-outline" style="padding: 6px 10px; font-size: 12px; color: #475569; border-color: #cbd5e1;">
                                 Vắng mặt
                             </button>
                         </form>
                     {% endif %}
-
+                    
                     {# Nút HỦY: Hiện khi chưa khám xong hoặc chưa hủy #}
                     {% if lh.TrangThai in ['CHO_XAC_NHAN', 'DA_XAC_NHAN'] %}
                     <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='HUY') }}" onsubmit="return confirm('Bạn chắc chắn muốn hủy lịch này?');">
@@ -424,6 +595,50 @@ Quản lý lịch hẹn
         {% endif %}
       </tbody>
     </table>
+      <div id="modalKham" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);">
+      <div class="card" style="margin: 10% auto; width: 500px; padding: 20px; position: relative;">
+          
+          <span onclick="document.getElementById('modalKham').style.display='none'" 
+                style="position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #aaa;">&times;</span>
+          
+          <h2 class="h1" style="font-size: 20px; margin-bottom: 15px;">Kết quả khám bệnh</h2>
+          <p class="muted" style="margin-bottom: 20px;">Nhập chẩn đoán và toa thuốc cho bệnh nhân: <strong id="modalTenBN"></strong></p>
+
+          <form action="{{ url_for('luu_ket_qua_kham') }}" method="POST">
+              <input type="hidden" name="lich_hen_id" id="modalLichHenID">
+
+              <div class="field">
+                  <label class="label">Chẩn đoán / Kết luận</label>
+                  <textarea class="input" name="chan_doan" rows="3" required placeholder="Ví dụ: Viêm họng cấp..."></textarea>
+              </div>
+
+              <div class="field">
+                  <label class="label">Toa thuốc / Chỉ định</label>
+                  <textarea class="input" name="toa_thuoc" rows="4" required placeholder="Ví dụ: Panadol 500mg (2 viên/ngày)..."></textarea>
+              </div>
+
+              <div style="display: flex; gap: 10px; margin-top: 15px;">
+                  <button type="submit" class="btn btn-primary" style="flex: 1;">Lưu & Hoàn thành</button>
+                  <button type="button" class="btn btn-outline" onclick="document.getElementById('modalKham').style.display='none'" style="flex: 1;">Đóng</button>
+              </div>
+          </form>
+      </div>
+  </div>
+
+  <script>
+      function moFormKham(id, tenBenhNhan) {
+          document.getElementById('modalLichHenID').value = id;
+          document.getElementById('modalTenBN').innerText = tenBenhNhan;
+          document.getElementById('modalKham').style.display = 'block';
+      }
+      
+      // Đóng modal khi click ra ngoài
+      window.onclick = function(event) {
+          if (event.target == document.getElementById('modalKham')) {
+              document.getElementById('modalKham').style.display = "none";
+          }
+      }
+  </script>
   </div>
 </div>
 {% endblock %}
@@ -485,7 +700,7 @@ Thông tin phòng khám
               <th>Họ tên</th>
               <th>Chuyên khoa</th>
               <th>Kinh nghiệm</th>
-              <th>SĐT</th>
+              <th>Đánh giá</th> <th>SĐT</th>
             </tr>
           </thead>
 
@@ -496,6 +711,16 @@ Thông tin phòng khám
                 <td>{{ bs.HoTen }}</td>
                 <td>{{ bs.TenChuyenKhoa }}</td>
                 <td>{{ bs.KinhNghiemNam }} năm</td>
+                
+                <td>
+                  {% if bs.LuotDanhGia > 0 %}
+                      <span style="color: #f59e0b; font-weight: bold;">{{ bs.DiemTrungBinh }} ⭐</span>
+                      <div class="muted" style="font-size: 11px;">({{ bs.LuotDanhGia }} lượt)</div>
+                  {% else %}
+                      <span class="muted" style="font-size: 12px;">Chưa có</span>
+                  {% endif %}
+                </td>
+
                 <td>{{ bs.SoDienThoai }}</td>
               </tr>
             {% endfor %}
@@ -509,6 +734,7 @@ Thông tin phòng khám
 
 </div>
 {% endblock %}
+
 <!--end_thong_tin_phong_kham.html-->
 
 <!--trang_benh_nhan.html-->
@@ -525,6 +751,95 @@ Lịch hẹn của tôi
 {% endblock %}
 
 {% block content %}
+{% if thong_bao_nhac_lich %}
+<div class="alert" style="background-color: #fffbeb; border: 1px solid #fcd34d; color: #92400e; margin-bottom: 20px;">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+        <span style="font-size: 20px;">🔔</span>
+        <strong>Lịch khám sắp tới</strong>
+    </div>
+    <ul style="margin: 0; padding-left: 24px;">
+        {% for msg in thong_bao_nhac_lich %}
+            <li style="margin-bottom: 4px;">{{ msg }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+<div class="card" style="margin-bottom: 20px;">
+    <div class="card__header">
+        <h3 class="h1" style="font-size: 16px;">Chia sẻ hồ sơ y tế</h3>
+        <p class="muted" style="font-size: 13px; margin-top: 4px;">Tạo mã QR để bác sĩ khác có thể xem lịch sử khám của bạn.</p>
+    </div>
+
+    <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid var(--border);">
+        {% if share_token %}
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start;">
+                
+                <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid var(--border); flex-shrink: 0;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data={{ request.url_root }}ho-so-y-te/{{ share_token }}" alt="QR Code" width="120" height="120">
+                </div>
+
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                        <span style="color: var(--green); font-size: 18px;">●</span>
+                        <strong style="color: var(--green);">Đang chia sẻ công khai</strong>
+                    </div>
+                    
+                    <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 10px 0; line-height: 1.4;">
+                        Quét mã bên cạnh hoặc sao chép đường dẫn dưới đây để gửi cho bác sĩ.
+                    </p>
+                    
+                    <div style="margin-bottom: 12px;">
+                        <input type="text" class="input" 
+                               value="{{ request.url_root }}ho-so-y-te/{{ share_token }}" 
+                               readonly 
+                               onclick="this.select()"
+                               style="font-size: 12px; background: #e2e8f0; color: #475569; padding: 8px;">
+                    </div>
+
+                    <form method="POST" action="{{ url_for('tao_lien_ket_chia_se') }}">
+                        <input type="hidden" name="hanh_dong" value="huy">
+                        <button type="submit" class="btn btn-outline" style="border-color: var(--red); color: var(--red); padding: 8px 16px; font-size: 13px; margin: 0;">
+                            Hủy chia sẻ / Vô hiệu hóa Link
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+                <p class="muted" style="margin: 0; font-size: 13px;">Hồ sơ của bạn hiện tại là <strong>Riêng tư</strong>.</p>
+                
+                <form method="POST" action="{{ url_for('tao_lien_ket_chia_se') }}">
+                    <input type="hidden" name="hanh_dong" value="tao">
+                    <button type="submit" class="btn btn-primary" style="margin: 0; font-size: 13px;">
+                        + Tạo mã chia sẻ ngay
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+</div>
+<div class="card" style="margin-bottom: 20px; padding: 15px 20px;">
+    <form method="POST" action="{{ url_for('xu_ly_cai_dat_thong_bao') }}" style="display: flex; align-items: center; justify-content: space-between;">
+        
+        <div>
+            <h3 class="h1" style="font-size: 16px; margin-bottom: 4px;">Thông báo nhắc lịch</h3>
+            <p class="muted" style="margin: 0; font-size: 13px;">Nhận nhắc nhở trên web trước giờ khám 24 tiếng.</p>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 13px; font-weight: 600; color: var(--text-muted);">
+                {{ 'ĐANG BẬT' if cai_dat_thong_bao == 1 else 'ĐANG TẮT' }}
+            </span>
+            
+            <label class="switch">
+                <input type="checkbox" name="nhan_thong_bao" onchange="this.form.submit()" 
+                       {% if cai_dat_thong_bao == 1 %}checked{% endif %}>
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+    </form>
+</div>
 <div class="card">
 
   <div class="card__header card__header--row">
@@ -584,6 +899,19 @@ Lịch hẹn của tôi
                     Huỷ
                   </button>
                 </form>
+              {% elif lh.TrangThai == 'DA_KHAM' %}
+                {% if lh.SoSao %}
+                    <span style="color: #f59e0b; font-weight: bold;">
+                        {{ lh.SoSao }} ⭐
+                    </span>
+                {% else %}
+                    <a href="{{ url_for('danh_gia', lich_hen_id=lh.LichHenID) }}" 
+                       class="btn btn-outline" 
+                       style="padding: 6px 12px; font-size: 12px; border-color: #f59e0b; color: #f59e0b;">
+                       Đánh giá
+                    </a>
+                {% endif %}
+              
               {% else %}
                 <span class="muted">-</span>
               {% endif %}
@@ -599,4 +927,5 @@ Lịch hẹn của tôi
 
 </div>
 {% endblock %}
+
 <!--end_trang_benh_nhan.html-->

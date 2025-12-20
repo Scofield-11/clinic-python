@@ -1,60 +1,70 @@
 {% extends "base.html" %}
 
-{% block title %}
-Lịch hẹn của tôi
-{% endblock %}
+{% block title %}Lịch hẹn của tôi{% endblock %}
 
 {% block top_actions %}
-  <a href="{{ url_for('dat_lich') }}" class="btn btn-primary">Đặt lịch</a>
-  <a href="{{ url_for('dang_xuat') }}" class="btn btn-outline">Đăng xuất</a>
+  <a href="{{ url_for('benh_nhan.dat_lich') }}" class="btn btn-primary">Đặt lịch</a>
+  <a href="{{ url_for('auth.dang_xuat') }}" class="btn btn-outline">Đăng xuất</a>
 {% endblock %}
 
 {% block content %}
+
 {% if thong_bao_nhac_lich %}
-<div class="alert" style="background-color: #fffbeb; border: 1px solid #fcd34d; color: #92400e; margin-bottom: 20px;">
-    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+<div class="alert-warning mb-20">
+    <div class="d-flex gap-10 mb-15">
         <span style="font-size: 20px;">🔔</span>
         <strong>Lịch khám sắp tới</strong>
     </div>
-    <ul style="margin: 0; padding-left: 24px;">
+    <ul>
         {% for msg in thong_bao_nhac_lich %}
-            <li style="margin-bottom: 4px;">{{ msg }}</li>
+            <li>{{ msg }}</li>
         {% endfor %}
     </ul>
 </div>
 {% endif %}
 
-<div class="card" style="margin-bottom: 20px; padding: 15px 20px;">
-    <form method="POST" action="{{ url_for('xu_ly_cai_dat_thong_bao') }}" style="display: flex; align-items: center; justify-content: space-between;">
-        
-        <div>
-            <h3 class="h1" style="font-size: 16px; margin-bottom: 4px;">Thông báo nhắc lịch</h3>
-            <p class="muted" style="margin: 0; font-size: 13px;">Nhận nhắc nhở trên web trước giờ khám 24 tiếng.</p>
+<div class="grid-2 mb-20">
+    
+    <div class="card widget-card">
+        <div class="widget-text">
+            <h3 class="h1">Chia sẻ hồ sơ</h3>
+            <p>Tạo mã QR xem lịch sử khám</p>
         </div>
-        
-        <div style="display: flex; align-items: center; gap: 12px;">
-            <span style="font-size: 13px; font-weight: 600; color: var(--text-muted);">
-                {{ 'ĐANG BẬT' if cai_dat_thong_bao == 1 else 'ĐANG TẮT' }}
-            </span>
+        <a href="{{ url_for('benh_nhan.quan_ly_chia_se') }}" class="btn btn-outline btn-sm">
+            Quản lý →
+        </a>
+    </div>
+
+    <div class="card widget-card">
+        <form method="POST" action="{{ url_for('benh_nhan.xu_ly_cai_dat_thong_bao') }}" class="widget-form">
+            <div class="widget-text">
+                <h3 class="h1">Nhắc lịch khám</h3>
+                <p>Nhắc trước 24h</p>
+            </div>
             
-            <label class="switch">
-                <input type="checkbox" name="nhan_thong_bao" onchange="this.form.submit()" 
-                       {% if cai_dat_thong_bao == 1 %}checked{% endif %}>
-                <span class="slider round"></span>
-            </label>
-        </div>
+            <div class="d-flex gap-10">
+                <span class="text-sm text-bold muted">
+                    {{ 'BẬT' if cai_dat_thong_bao == 1 else 'TẮT' }}
+                </span>
+                <label class="switch">
+                    <input type="checkbox" name="nhan_thong_bao" onchange="this.form.submit()" 
+                           {% if cai_dat_thong_bao == 1 %}checked{% endif %}>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </form>
+    </div>
 
-    </form>
 </div>
-<div class="card">
 
+<div class="card">
   <div class="card__header card__header--row">
     <div>
       <h1 class="h1">Lịch hẹn của tôi</h1>
       <p class="muted">Danh sách các lịch khám bạn đã đặt</p>
     </div>
 
-    <a href="{{ url_for('thong_tin_phong_kham') }}" class="btn btn-ghost">
+    <a href="{{ url_for('public.thong_tin_phong_kham') }}" class="btn btn-ghost">
       Thông tin phòng khám
     </a>
   </div>
@@ -71,7 +81,6 @@ Lịch hẹn của tôi
             <th>Thao tác</th>
           </tr>
         </thead>
-
         <tbody>
         {% for lh in lich_hen %}
           <tr class="t-center">
@@ -80,46 +89,32 @@ Lịch hẹn của tôi
             <td>{{ lh.GioKham }}</td>
             <td>
               <span class="badge badge--{{ lh.TrangThai }}">
-                {% if lh.TrangThai == 'CHO_XAC_NHAN' %}
-                  Chờ xác nhận
-                {% elif lh.TrangThai == 'DA_XAC_NHAN' %}
-                  Đã xác nhận
-                {% elif lh.TrangThai == 'DA_KHAM' %}
-                  Đã khám
-                {% elif lh.TrangThai == 'HUY' %}
-                  Đã huỷ
-                {% elif lh.TrangThai == 'VANG_MAT' %} 
-                  Vắng mặt
+                {% if lh.TrangThai == 'CHO_XAC_NHAN' %} Chờ xác nhận
+                {% elif lh.TrangThai == 'DA_XAC_NHAN' %} Đã xác nhận
+                {% elif lh.TrangThai == 'DA_KHAM' %} Đã khám
+                {% elif lh.TrangThai == 'HUY' %} Đã huỷ
+                {% elif lh.TrangThai == 'VANG_MAT' %} Vắng mặt
                 {% endif %}
               </span>
             </td>
             <td class="t-center">
               {% if lh.TrangThai in ['CHO_XAC_NHAN', 'DA_XAC_NHAN'] %}
-                <form
-                  method="post"
-                  action="{{ url_for('huy_lich', lich_hen_id=lh.LichHenID) }}"
-                  onsubmit="return confirm('Bạn có chắc chắn muốn huỷ lịch khám này?')"
-                  class="inline-form"
-                >
-                  <button type="submit" class="btn btn-danger">
-                    Huỷ
-                  </button>
+                <form method="post" action="{{ url_for('benh_nhan.huy_lich', lich_hen_id=lh.LichHenID) }}"
+                      onsubmit="return confirm('Bạn có chắc chắn muốn huỷ lịch khám này?')" class="inline-form">
+                  <button type="submit" class="btn btn-danger btn-sm">Huỷ</button>
                 </form>
               {% elif lh.TrangThai == 'DA_KHAM' %}
                 {% if lh.SoSao %}
-                    <span style="color: #f59e0b; font-weight: bold;">
-                        {{ lh.SoSao }} ⭐
-                    </span>
+                    <span class="text-warning text-bold">{{ lh.SoSao }} ⭐</span>
                 {% else %}
-                    <a href="{{ url_for('danh_gia', lich_hen_id=lh.LichHenID) }}" 
-                       class="btn btn-outline" 
-                       style="padding: 6px 12px; font-size: 12px; border-color: #f59e0b; color: #f59e0b;">
+                    <a href="{{ url_for('benh_nhan.danh_gia', lich_hen_id=lh.LichHenID) }}" 
+                       class="btn btn-outline btn-sm" 
+                       style="border-color: #f59e0b; color: #f59e0b;">
                        Đánh giá
                     </a>
                 {% endif %}
-              
               {% else %}
-                <span class="muted">-</span>
+                  <span class="muted">-</span>
               {% endif %}
             </td>
           </tr>

@@ -7,24 +7,25 @@
   <div class="card__header">
     <h1 class="h1">Đánh giá dịch vụ</h1>
     <p class="muted">Bác sĩ: <strong>{{ lich.TenBacSi }}</strong></p>
-    <p class="muted" style="font-size: 12px;">Ngày khám: {{ lich.NgayKham }}</p>
+    <p class="muted text-sm">Ngày khám: {{ lich.NgayKham }}</p>
   </div>
 
   <form method="post" class="form">
     <label class="label">Mức độ hài lòng</label>
-    <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-        <label><input type="radio" name="so_sao" value="5" checked> ⭐⭐⭐⭐⭐ (Tuyệt vời)</label><br>
+    
+    <div class="rating-group">
+        <label><input type="radio" name="so_sao" value="5" checked> ⭐⭐⭐⭐⭐ (Tuyệt vời)</label>
     </div>
-    <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+    <div class="rating-group">
         <label><input type="radio" name="so_sao" value="4"> ⭐⭐⭐⭐ (Tốt)</label>
     </div>
-    <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+    <div class="rating-group">
         <label><input type="radio" name="so_sao" value="3"> ⭐⭐⭐ (Bình thường)</label>
     </div>
-    <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+    <div class="rating-group">
         <label><input type="radio" name="so_sao" value="2"> ⭐⭐ (Tệ)</label>
     </div>
-    <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+    <div class="rating-group">
         <label><input type="radio" name="so_sao" value="1"> ⭐ (Rất tệ)</label>
     </div>
 
@@ -32,7 +33,7 @@
     <textarea class="input" id="binh_luan" name="binh_luan" rows="4" placeholder="Bác sĩ khám như thế nào?"></textarea>
 
     <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
-    <a href="{{ url_for('trang_benh_nhan') }}" class="btn btn-ghost">Quay lại</a>
+    <a href="{{ url_for('benh_nhan.trang_benh_nhan') }}" class="btn btn-ghost">Quay lại</a>
   </form>
 </div>
 {% endblock %}

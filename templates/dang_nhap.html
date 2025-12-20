@@ -23,22 +23,10 @@
   <form method="post" class="form">
 
     <label class="label" for="ten_dang_nhap">Tên đăng nhập</label>
-    <input
-      class="input"
-      type="text"
-      id="ten_dang_nhap"
-      name="ten_dang_nhap"
-      required
-    >
+    <input class="input" type="text" id="ten_dang_nhap" name="ten_dang_nhap" required>
 
     <label class="label" for="mat_khau">Mật khẩu</label>
-    <input
-      class="input"
-      type="password"
-      id="mat_khau"
-      name="mat_khau"
-      required
-    >
+    <input class="input" type="password" id="mat_khau" name="mat_khau" required>
 
     <button type="submit" class="btn btn-primary">
       Đăng nhập
@@ -48,7 +36,7 @@
 
   <div class="auth__footer">
     <span class="muted">Chưa có tài khoản?</span>
-    <a class="link" href="{{ url_for('dang_ky') }}">Đăng ký</a>
+    <a class="link" href="{{ url_for('auth.dang_ky') }}">Đăng ký</a>
   </div>
 
 </div>
