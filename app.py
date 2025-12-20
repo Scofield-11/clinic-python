@@ -126,6 +126,19 @@ def dang_nhap():
             """
             cur.execute(sql, (ten_dang_nhap,))
             user = cur.fetchone()
+            #SPRINT2
+            if user:
+                user["HoTen"] = user["TenDangNhap"] 
+                if user["VaiTro"] == "BAC_SI":
+                    cur.execute("SELECT HoTen FROM BAC_SI WHERE AccountID = %s", (user["AccountID"],))
+                    bs = cur.fetchone()
+                    if bs:
+                        user["HoTen"] = bs["HoTen"]
+                elif user["VaiTro"] == "BENH_NHAN":
+                    cur.execute("SELECT HoTen FROM BENH_NHAN WHERE AccountID = %s", (user["AccountID"],))
+                    bn = cur.fetchone()
+                    if bn:
+                        user["HoTen"] = bn["HoTen"]
     finally:
         conn.close()
 
@@ -145,8 +158,14 @@ def dang_nhap():
     session["account_id"] = user["AccountID"]
     session["ten_dang_nhap"] = user["TenDangNhap"]
     session["vai_tro"] = user["VaiTro"]
-
-    return redirect(url_for("trang_benh_nhan"))
+    session["ho_ten"] = user["HoTen"]
+    #gemini
+    if user["VaiTro"] == "BENH_NHAN":
+        return redirect(url_for("trang_benh_nhan"))
+    else:
+        # Nếu là BAC_SI hoặc ADMIN thì sang trang quản lý
+        return redirect(url_for("quan_ly_lich_hen"))
+    #end
 
 
 
@@ -212,7 +231,9 @@ def trang_benh_nhan():
             """
             cur.execute(sql, (account_id,))
             lich_hen = cur.fetchall()
-
+            for lh in lich_hen:
+                if lh["NgayKham"]:
+                    lh["NgayKham"] = lh["NgayKham"].strftime("%d/%m/%Y")
             
     finally:
         conn.close()
@@ -344,6 +365,80 @@ def huy_lich(lich_hen_id):
         conn.close()
 
     return redirect(url_for("trang_benh_nhan"))
+
+#gemini
+@app.route("/quan-ly-lich-hen")
+def quan_ly_lich_hen():
+    if "account_id" not in session:
+        return redirect(url_for("dang_nhap"))
+    
+    # Kiểm tra quyền: chỉ Admin và Bác sĩ được vào
+    if session["vai_tro"] not in ['ADMIN', 'BAC_SI']:
+        return "Bạn không có quyền truy cập trang này."
+
+    conn = get_connection()
+    ds_lich_hen = []
+    
+    try:
+        with conn.cursor() as cur:
+            # Câu query cơ bản lấy thông tin lịch, tên bệnh nhân, tên bác sĩ
+            sql = """
+                SELECT 
+                    lh.LichHenID, 
+                    lh.NgayKham, 
+                    lh.GioKham, 
+                    lh.LyDoKham, 
+                    lh.TrangThai,
+                    bn.HoTen AS TenBenhNhan,
+                    bn.GioiTinh,
+                    bn.NgaySinh,
+                    bs.HoTen AS TenBacSi
+                FROM LICH_HEN lh
+                JOIN BENH_NHAN bn ON lh.PatientID = bn.PatientID
+                JOIN BAC_SI bs ON lh.BacSiID = bs.BacSiID
+            """
+            
+            # Nếu là Bác sĩ, chỉ xem lịch của chính mình
+            if session["vai_tro"] == 'BAC_SI':
+                # Tìm BacSiID tương ứng với AccountID đang đăng nhập
+                cur.execute("SELECT BacSiID FROM BAC_SI WHERE AccountID = %s", (session["account_id"],))
+                bs_info = cur.fetchone()
+                if bs_info:
+                    sql += f" WHERE lh.BacSiID = {bs_info['BacSiID']}"
+                else:
+                    # Trường hợp tài khoản có vai trò Bác sĩ nhưng chưa được liên kết data Bác sĩ
+                    return "Tài khoản bác sĩ này chưa được liên kết hồ sơ nhân sự."
+            
+            # Nếu là ADMIN thì xem hết (không cần WHERE), sắp xếp ngày mới nhất lên đầu
+            sql += " ORDER BY lh.NgayKham DESC, lh.GioKham ASC"
+            
+            cur.execute(sql)
+            ds_lich_hen = cur.fetchall()
+
+    finally:
+        conn.close()
+
+    return render_template("quan_ly_lich_hen.html", ds_lich_hen=ds_lich_hen)
+
+@app.route("/cap-nhat-trang-thai/<int:lich_hen_id>/<trang_thai>", methods=["POST"])
+def cap_nhat_trang_thai(lich_hen_id, trang_thai):
+    if "account_id" not in session or session["vai_tro"] not in ['ADMIN', 'BAC_SI']:
+        return redirect(url_for("dang_nhap"))
+
+    valid_status = ['DA_XAC_NHAN', 'DA_KHAM', 'HUY', 'VANG_MAT'] # Đã bổ sung VANG_MAT
+    if trang_thai not in valid_status:
+        return "Trạng thái không hợp lệ."
+
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            sql = "UPDATE LICH_HEN SET TrangThai = %s WHERE LichHenID = %s"
+            cur.execute(sql, (trang_thai, lich_hen_id))
+        conn.commit()
+    finally:
+        conn.close()
+
+    return redirect(url_for("quan_ly_lich_hen"))
 
 if __name__ == "__main__":
     app.run(debug=True)

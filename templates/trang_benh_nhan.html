@@ -27,22 +27,22 @@ Lịch hẹn của tôi
     <div class="table-wrap">
       <table class="table">
         <thead>
-          <tr>
-            <th class="t-center">Bác sĩ</th>
-            <th class="t-center">Ngày</th>
-            <th class="t-center">Giờ</th>
-            <th class="t-center">Trạng thái</th>
-            <th class="t-center">Thao tác</th>
+          <tr class="t-center">
+            <th>Bác sĩ</th>
+            <th>Ngày</th>
+            <th>Giờ</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
           </tr>
         </thead>
 
         <tbody>
         {% for lh in lich_hen %}
-          <tr>
-            <td class="t-center">{{ lh.TenBacSi }}</td>
-            <td class="t-center">{{ lh.NgayKham }}</td>
-            <td class="t-center">{{ lh.GioKham }}</td>
-            <td class="t-center">
+          <tr class="t-center">
+            <td>{{ lh.TenBacSi }}</td>
+            <td>{{ lh.NgayKham }}</td>
+            <td>{{ lh.GioKham }}</td>
+            <td>
               <span class="badge badge--{{ lh.TrangThai }}">
                 {% if lh.TrangThai == 'CHO_XAC_NHAN' %}
                   Chờ xác nhận
@@ -52,6 +52,8 @@ Lịch hẹn của tôi
                   Đã khám
                 {% elif lh.TrangThai == 'HUY' %}
                   Đã huỷ
+                {% elif lh.TrangThai == 'VANG_MAT' %} 
+                  Vắng mặt
                 {% endif %}
               </span>
             </td>

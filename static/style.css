@@ -229,7 +229,7 @@ a:hover{ text-decoration: underline; }
   border: none;
   font-size: 14px;
   cursor: pointer;
-  margin-top: 1px;
+  margin-top: 17px;
   margin-bottom: 10px;
 }
 
@@ -308,6 +308,11 @@ a:hover{ text-decoration: underline; }
   background: var(--green-soft);
   color: var(--green);
 }
+.badge--VANG_MAT {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
 
 .info{
   display: grid;
@@ -362,4 +367,62 @@ a:hover{ text-decoration: underline; }
   display: inline-flex;
   align-items: center;
 }
+
+
+
+
+
+/*SPRINT2*/
+
+
+
+
+
+
+
+.user-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  
+  /* Màu nền và viền */
+  background-color: #fff;         /* Nền trắng cho sạch (hoặc var(--blue-soft) nếu thích xanh) */
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  
+  /* Kích thước: Dày bằng nút (10px), Ngang dài hơn (30px) */
+  padding: 14px 30px; 
+  
+  /* Bo tròn hình viên thuốc */
+  border-radius: 99px;
+  
+  /* Căn chỉnh vị trí */
+  margin-right: 8px;              /* Cách nút đăng xuất một chút */
+  margin-top: 17px;               /* Căn đều với margin-top của class .btn để thẳng hàng */
+  margin-bottom: 10px;
+  
+  font-size: 14px;
+  box-shadow: var(--shadow-soft); /* Đổ bóng nhẹ cho đẹp */
+}
+
+.user-info strong {
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.user-info:hover {
+  background-color: #fff;         /* Chuyển nền trắng */
+  border-color: var(--blue);      /* Viền xanh */
+  box-shadow: var(--shadow-soft); /* Đổ bóng nhẹ */
+  cursor: default;
+}
+
+@media (max-width: 600px) {
+  .user-info {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+
 

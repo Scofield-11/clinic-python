@@ -1,0 +1,602 @@
+<!--base.html-->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Phòng khám nhóm 3{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div class="app-shell">
+    
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand__logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo y tế">
+        </div>
+        <div class="brand__text">
+          <div class="brand__name">Phòng khám nhóm 3</div>
+          <div class="brand__sub">Hệ thống quản lý lịch khám</div>
+        </div>
+      </div>
+
+      <div class="topbar__actions">
+        {% block top_actions %}{% endblock %}
+      </div>
+    </header>
+
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>
+<!--end_base.html-->
+
+<!--dang_ky.html-->
+
+{% extends "base.html" %}
+
+{% block title %}
+Đăng ký
+{% endblock %}
+
+{% block content %}
+<div class="card auth auth--wide">
+
+  <div class="card__header">
+    <h1 class="h1">Đăng ký tài khoản</h1>
+    <p class="muted">Vui lòng nhập đầy đủ thông tin để tạo tài khoản</p>
+  </div>
+
+  {% if loi %}
+    <ul class="alert">
+      {% for msg in loi %}
+        <li>{{ msg }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="post" class="form form--grid">
+
+    <div class="field">
+      <label class="label" for="ten_dang_nhap">Tên đăng nhập</label>
+      <input
+        class="input"
+        type="text"
+        id="ten_dang_nhap"
+        name="ten_dang_nhap"
+        required
+      >
+    </div>
+
+    <div class="field">
+      <label class="label" for="email">Email</label>
+      <input
+        class="input"
+        type="email"
+        id="email"
+        name="email"
+        required
+      >
+    </div>
+
+    <div class="field">
+      <label class="label" for="mat_khau">Mật khẩu</label>
+      <input
+        class="input"
+        type="password"
+        id="mat_khau"
+        name="mat_khau"
+        required
+      >
+    </div>
+
+    <div class="field">
+      <label class="label" for="xac_nhan_mat_khau">Nhập lại mật khẩu</label>
+      <input
+        class="input"
+        type="password"
+        id="xac_nhan_mat_khau"
+        name="xac_nhan_mat_khau"
+        required
+      >
+    </div>
+
+    <div class="field">
+      <label class="label" for="ho_ten">Họ tên</label>
+      <input
+        class="input"
+        type="text"
+        id="ho_ten"
+        name="ho_ten"
+        required
+      >
+    </div>
+
+    <div class="field">
+      <label class="label" for="so_dien_thoai">Số điện thoại</label>
+      <input
+        class="input"
+        type="text"
+        id="so_dien_thoai"
+        name="so_dien_thoai"
+      >
+    </div>
+
+    <div class="field">
+      <label class="label" for="ngay_sinh">Ngày sinh</label>
+      <input
+        class="input"
+        type="date"
+        id="ngay_sinh"
+        name="ngay_sinh"
+      >
+    </div>
+
+    <div class="field">
+      <label class="label" for="gioi_tinh">Giới tính</label>
+      <select
+        class="input"
+        id="gioi_tinh"
+        name="gioi_tinh"
+      >
+        <option value="">-- Chọn --</option>
+        <option value="NAM">Nam</option>
+        <option value="NU">Nữ</option>
+        <option value="KHAC">Khác</option>
+      </select>
+    </div>
+
+    <div class="field field--full">
+      <label class="label" for="dia_chi">Địa chỉ</label>
+      <textarea
+        class="input"
+        id="dia_chi"
+        name="dia_chi"
+        rows="3"
+      ></textarea>
+    </div>
+
+    <div class="field field--full">
+      <button type="submit" class="btn btn-primary">
+        Tạo tài khoản
+      </button>
+    </div>
+
+  </form>
+
+  <div class="auth__footer">
+    <span class="muted">Đã có tài khoản?</span>
+    <a class="link" href="{{ url_for('dang_nhap') }}">Đăng nhập</a>
+  </div>
+
+</div>
+{% endblock %}
+
+<!--dang_nhap.html-->
+
+{% extends "base.html" %}
+
+{% block title %}
+Đăng nhập
+{% endblock %}
+
+{% block content %}
+<div class="card auth">
+
+  <div class="card__header">
+    <h1 class="h1">Đăng nhập</h1>
+    <p class="muted">Vui lòng nhập thông tin để truy cập hệ thống</p>
+  </div>
+
+  {% if loi %}
+    <ul class="alert">
+      {% for msg in loi %}
+        <li>{{ msg }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="post" class="form">
+
+    <label class="label" for="ten_dang_nhap">Tên đăng nhập</label>
+    <input
+      class="input"
+      type="text"
+      id="ten_dang_nhap"
+      name="ten_dang_nhap"
+      required
+    >
+
+    <label class="label" for="mat_khau">Mật khẩu</label>
+    <input
+      class="input"
+      type="password"
+      id="mat_khau"
+      name="mat_khau"
+      required
+    >
+
+    <button type="submit" class="btn btn-primary">
+      Đăng nhập
+    </button>
+
+  </form>
+
+  <div class="auth__footer">
+    <span class="muted">Chưa có tài khoản?</span>
+    <a class="link" href="{{ url_for('dang_ky') }}">Đăng ký</a>
+  </div>
+
+</div>
+{% endblock %}
+<!--end_dang_ky.html-->
+
+<!--dat_lich.html-->
+
+{% extends "base.html" %}
+
+{% block title %}
+Đặt lịch khám
+{% endblock %}
+
+{% block top_actions %}
+<a class="btn btn-ghost" href="{{ url_for('trang_benh_nhan') }}">← Trang bệnh nhân</a>
+{% endblock %}
+
+{% block content %}
+<div class="card auth auth-large">
+
+  <div class="card__header">
+    <h1 class="h1">Đặt lịch khám</h1>
+    <p class="muted">Chọn bác sĩ và thời gian phù hợp để đặt lịch</p>
+  </div>
+
+  {% if loi %}
+    <ul class="alert">
+      {% for msg in loi %}
+        <li>{{ msg }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="post" class="form">
+
+    <label class="label" for="bac_si">Chọn bác sĩ</label>
+    <select class="input" id="bac_si" name="bac_si" required>
+      <option value="">-- Chọn bác sĩ --</option>
+      {% for bs in ds_bac_si %}
+        <option value="{{ bs.BacSiID }}">{{ bs.HoTen }}</option>
+      {% endfor %}
+    </select>
+
+    <div class="row">
+      <div class="field">
+        <label class="label" for="ngay_kham">Ngày khám</label>
+        <input class="input" type="date" id="ngay_kham" name="ngay_kham" required>
+      </div>
+
+      <div class="field">
+        <label class="label" for="gio_kham">Giờ khám</label>
+        <input class="input" type="time" id="gio_kham" name="gio_kham" required>
+      </div>
+    </div>
+
+    <label class="label" for="ly_do">Lý do khám (tuỳ chọn)</label>
+    <textarea class="input" id="ly_do" name="ly_do" rows="3"></textarea>
+
+    <button type="submit" class="btn btn-primary">
+      Xác nhận đặt lịch
+    </button>
+
+    <div class="hint">
+      <a class="link" href="{{ url_for('thong_tin_phong_kham') }}">
+        Xem thông tin phòng khám & bác sĩ
+      </a>
+    </div>
+
+  </form>
+
+</div>
+{% endblock %}
+<!--end_dat_lich.html-->
+
+<!--quan_ly_lich_hen.html-->
+
+{% extends "base.html" %}
+
+{% block title %}
+Quản lý lịch hẹn
+{% endblock %}
+
+{% block top_actions %}
+  <div class="user-info">
+      Xin chào, <strong>{{ session.ho_ten }}</strong>
+  </div>
+  <a class="btn btn-danger" href="{{ url_for('dang_xuat') }}">Đăng xuất</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card__header card__header--row">
+    <div>
+        <h1 class="h1">Danh sách lịch hẹn</h1>
+        <p class="muted">Quản lý và duyệt lịch khám bệnh</p>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Mã số</th>
+          <th>Thời gian</th>
+          <th>Bệnh nhân</th>
+          <th>Thông tin</th>
+          {% if session.vai_tro == 'ADMIN' %}
+            <th>Bác sĩ phụ trách</th>
+          {% endif %}
+          <th>Trạng thái</th>
+          <th class="t-center">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if ds_lich_hen %}
+            {% for lh in ds_lich_hen %}
+            <tr class="t-center">
+              <td>{{ lh.LichHenID }}</td>
+              <td>
+                <div style="font-weight: bold;">{{ lh.GioKham }}</div>
+                <div class="muted">{{ lh.NgayKham }}</div>
+              </td>
+              <td>
+                <div style="font-weight: 700;">{{ lh.TenBenhNhan }}</div>
+                <div style="font-size: 12px; color: #64748b;">
+                    {{ lh.GioiTinh }} - {{ lh.NgaySinh }}
+                </div>
+              </td>
+              <td style="max-width: 200px;">
+                {% if lh.LyDoKham %}
+                    {{ lh.LyDoKham }}
+                {% else %}
+                    <span class="muted">-- Không có lý do --</span>
+                {% endif %}
+              </td>
+              
+              {% if session.vai_tro == 'ADMIN' %}
+                <td>{{ lh.TenBacSi }}</td>
+              {% endif %}
+
+              <td>
+                <span class="badge badge--{{ lh.TrangThai }}">
+                  {% if lh.TrangThai == 'CHO_XAC_NHAN' %} Chờ xác nhận
+                  {% elif lh.TrangThai == 'DA_XAC_NHAN' %} Đã duyệt
+                  {% elif lh.TrangThai == 'DA_KHAM' %} Đã khám
+                  {% elif lh.TrangThai == 'HUY' %} Đã hủy
+                  {% elif lh.TrangThai == 'VANG_MAT' %} Vắng mặt {% else %} {{ lh.TrangThai }}
+                  {% endif %}
+                </span>
+              </td>
+              <td class="t-center">
+                <div style="display: flex; gap: 5px; justify-content: center;">
+                    
+                    {# Nút DUYỆT: Chỉ hiện khi đang CHỜ XÁC NHẬN #}
+                    {% if lh.TrangThai == 'CHO_XAC_NHAN' %}
+                    <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='DA_XAC_NHAN') }}">
+                        <button type="submit" class="btn btn-primary" style="padding: 6px 10px; font-size: 12px;">Duyệt</button>
+                    </form>
+                    {% endif %}
+
+                    {# Nút HOÀN THÀNH hoặc VẮNG MẶT: Hiện khi ĐÃ DUYỆT #}
+                    {% if lh.TrangThai == 'DA_XAC_NHAN' %}
+                        <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='DA_KHAM') }}">
+                            <button type="submit" class="btn btn-outline" style="padding: 6px 10px; font-size: 12px; color: var(--green); border-color: var(--green);">
+                                Đã khám
+                            </button>
+                        </form>
+
+                        <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='VANG_MAT') }}" onsubmit="return confirm('Xác nhận bệnh nhân vắng mặt?');">
+                            <button type="submit" class="btn btn-outline" style="padding: 6px 10px; font-size: 12px; color: #475569; border-color: #cbd5e1;">
+                                Vắng mặt
+                            </button>
+                        </form>
+                    {% endif %}
+
+                    {# Nút HỦY: Hiện khi chưa khám xong hoặc chưa hủy #}
+                    {% if lh.TrangThai in ['CHO_XAC_NHAN', 'DA_XAC_NHAN'] %}
+                    <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='HUY') }}" onsubmit="return confirm('Bạn chắc chắn muốn hủy lịch này?');">
+                        <button type="submit" class="btn btn-ghost" style="padding: 6px 10px; font-size: 12px; color: var(--red);">Hủy</button>
+                    </form>
+                    {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="7" class="t-center muted" style="padding: 30px;">
+                    Chưa có lịch hẹn nào.
+                </td>
+            </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+<!--end_quan_ly_lich_hen.html-->
+
+<!--thong_tin_phong_kham.html-->
+
+{% extends "base.html" %}
+
+{% block title %}
+Thông tin phòng khám
+{% endblock %}
+
+{% block top_actions %}
+  <a class="btn btn-ghost" href="{{ url_for('trang_benh_nhan') }}">← Trang bệnh nhân</a>
+{% endblock %}
+
+{% block content %}
+<div class="grid-2">
+
+  <div class="card">
+    <div class="card__header">
+      <h1 class="h1">Thông tin phòng khám</h1>
+      <p class="muted">Thông tin liên hệ và giờ làm việc</p>
+    </div>
+
+    <div class="info">
+      <div class="info__row">
+        <span class="info__label">Tên:</span>
+        <span>{{ thong_tin.ten }}</span>
+      </div>
+      <div class="info__row">
+        <span class="info__label">Địa chỉ:</span>
+        <span>{{ thong_tin.dia_chi }}</span>
+      </div>
+      <div class="info__row">
+        <span class="info__label">Số điện thoại:</span>
+        <span>{{ thong_tin.so_dien_thoai }}</span>
+      </div>
+      <div class="info__row">
+        <span class="info__label">Giờ làm việc:</span>
+        <span>{{ thong_tin.gio_lam_viec }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__header">
+      <h1 class="h1">Danh sách bác sĩ</h1>
+      <p class="muted">Bác sĩ hiện có trong hệ thống</p>
+    </div>
+
+    {% if ds_bac_si %}
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Mã</th>
+              <th>Họ tên</th>
+              <th>Chuyên khoa</th>
+              <th>Kinh nghiệm</th>
+              <th>SĐT</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for bs in ds_bac_si %}
+              <tr>
+                <td>{{ bs.BacSiID }}</td>
+                <td>{{ bs.HoTen }}</td>
+                <td>{{ bs.TenChuyenKhoa }}</td>
+                <td>{{ bs.KinhNghiemNam }} năm</td>
+                <td>{{ bs.SoDienThoai }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="muted">Chưa có bác sĩ nào.</p>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}
+<!--end_thong_tin_phong_kham.html-->
+
+<!--trang_benh_nhan.html-->
+
+{% extends "base.html" %}
+
+{% block title %}
+Lịch hẹn của tôi
+{% endblock %}
+
+{% block top_actions %}
+  <a href="{{ url_for('dat_lich') }}" class="btn btn-primary">Đặt lịch</a>
+  <a href="{{ url_for('dang_xuat') }}" class="btn btn-outline">Đăng xuất</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+
+  <div class="card__header card__header--row">
+    <div>
+      <h1 class="h1">Lịch hẹn của tôi</h1>
+      <p class="muted">Danh sách các lịch khám bạn đã đặt</p>
+    </div>
+
+    <a href="{{ url_for('thong_tin_phong_kham') }}" class="btn btn-ghost">
+      Thông tin phòng khám
+    </a>
+  </div>
+
+  {% if lich_hen %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr class="t-center">
+            <th>Bác sĩ</th>
+            <th>Ngày</th>
+            <th>Giờ</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        {% for lh in lich_hen %}
+          <tr class="t-center">
+            <td>{{ lh.TenBacSi }}</td>
+            <td>{{ lh.NgayKham }}</td>
+            <td>{{ lh.GioKham }}</td>
+            <td>
+              <span class="badge badge--{{ lh.TrangThai }}">
+                {% if lh.TrangThai == 'CHO_XAC_NHAN' %}
+                  Chờ xác nhận
+                {% elif lh.TrangThai == 'DA_XAC_NHAN' %}
+                  Đã xác nhận
+                {% elif lh.TrangThai == 'DA_KHAM' %}
+                  Đã khám
+                {% elif lh.TrangThai == 'HUY' %}
+                  Đã huỷ
+                {% elif lh.TrangThai == 'VANG_MAT' %} 
+                  Vắng mặt
+                {% endif %}
+              </span>
+            </td>
+            <td class="t-center">
+              {% if lh.TrangThai in ['CHO_XAC_NHAN', 'DA_XAC_NHAN'] %}
+                <form
+                  method="post"
+                  action="{{ url_for('huy_lich', lich_hen_id=lh.LichHenID) }}"
+                  onsubmit="return confirm('Bạn có chắc chắn muốn huỷ lịch khám này?')"
+                  class="inline-form"
+                >
+                  <button type="submit" class="btn btn-danger">
+                    Huỷ
+                  </button>
+                </form>
+              {% else %}
+                <span class="muted">-</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">Bạn chưa có lịch hẹn nào.</p>
+  {% endif %}
+
+</div>
+{% endblock %}
+<!--end_trang_benh_nhan.html-->

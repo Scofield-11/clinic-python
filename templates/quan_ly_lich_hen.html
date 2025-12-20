@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}
+Quản lý lịch hẹn
+{% endblock %}
+
+{% block top_actions %}
+  <div class="user-info">
+      Xin chào, <strong>{{ session.ho_ten }}</strong>
+  </div>
+  <a class="btn btn-danger" href="{{ url_for('dang_xuat') }}">Đăng xuất</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card__header card__header--row">
+    <div>
+        <h1 class="h1">Danh sách lịch hẹn</h1>
+        <p class="muted">Quản lý và duyệt lịch khám bệnh</p>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Mã số</th>
+          <th>Thời gian</th>
+          <th>Bệnh nhân</th>
+          <th>Thông tin</th>
+          {% if session.vai_tro == 'ADMIN' %}
+            <th>Bác sĩ phụ trách</th>
+          {% endif %}
+          <th>Trạng thái</th>
+          <th class="t-center">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if ds_lich_hen %}
+            {% for lh in ds_lich_hen %}
+            <tr class="t-center">
+              <td>{{ lh.LichHenID }}</td>
+              <td>
+                <div style="font-weight: bold;">{{ lh.GioKham }}</div>
+                <div class="muted">{{ lh.NgayKham }}</div>
+              </td>
+              <td>
+                <div style="font-weight: 700;">{{ lh.TenBenhNhan }}</div>
+                <div style="font-size: 12px; color: #64748b;">
+                    {{ lh.GioiTinh }} - {{ lh.NgaySinh }}
+                </div>
+              </td>
+              <td style="max-width: 200px;">
+                {% if lh.LyDoKham %}
+                    {{ lh.LyDoKham }}
+                {% else %}
+                    <span class="muted">-- Không có lý do --</span>
+                {% endif %}
+              </td>
+              
+              {% if session.vai_tro == 'ADMIN' %}
+                <td>{{ lh.TenBacSi }}</td>
+              {% endif %}
+
+              <td>
+                <span class="badge badge--{{ lh.TrangThai }}">
+                  {% if lh.TrangThai == 'CHO_XAC_NHAN' %} Chờ xác nhận
+                  {% elif lh.TrangThai == 'DA_XAC_NHAN' %} Đã duyệt
+                  {% elif lh.TrangThai == 'DA_KHAM' %} Đã khám
+                  {% elif lh.TrangThai == 'HUY' %} Đã hủy
+                  {% elif lh.TrangThai == 'VANG_MAT' %} Vắng mặt {% else %} {{ lh.TrangThai }}
+                  {% endif %}
+                </span>
+              </td>
+              <td class="t-center">
+                <div style="display: flex; gap: 5px; justify-content: center;">
+                    
+                    {# Nút DUYỆT: Chỉ hiện khi đang CHỜ XÁC NHẬN #}
+                    {% if lh.TrangThai == 'CHO_XAC_NHAN' %}
+                    <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='DA_XAC_NHAN') }}">
+                        <button type="submit" class="btn btn-primary" style="padding: 6px 10px; font-size: 12px;">Duyệt</button>
+                    </form>
+                    {% endif %}
+
+                    {# Nút HOÀN THÀNH hoặc VẮNG MẶT: Hiện khi ĐÃ DUYỆT #}
+                    {% if lh.TrangThai == 'DA_XAC_NHAN' %}
+                        <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='DA_KHAM') }}">
+                            <button type="submit" class="btn btn-outline" style="padding: 6px 10px; font-size: 12px; color: var(--green); border-color: var(--green);">
+                                Đã khám
+                            </button>
+                        </form>
+
+                        <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='VANG_MAT') }}" onsubmit="return confirm('Xác nhận bệnh nhân vắng mặt?');">
+                            <button type="submit" class="btn btn-outline" style="padding: 6px 10px; font-size: 12px; color: #475569; border-color: #cbd5e1;">
+                                Vắng mặt
+                            </button>
+                        </form>
+                    {% endif %}
+
+                    {# Nút HỦY: Hiện khi chưa khám xong hoặc chưa hủy #}
+                    {% if lh.TrangThai in ['CHO_XAC_NHAN', 'DA_XAC_NHAN'] %}
+                    <form method="POST" action="{{ url_for('cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='HUY') }}" onsubmit="return confirm('Bạn chắc chắn muốn hủy lịch này?');">
+                        <button type="submit" class="btn btn-ghost" style="padding: 6px 10px; font-size: 12px; color: var(--red);">Hủy</button>
+                    </form>
+                    {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="7" class="t-center muted" style="padding: 30px;">
+                    Chưa có lịch hẹn nào.
+                </td>
+            </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -70,3 +70,37 @@ VALUES
 (3, 'BS. Trần Văn Phục', 'BS Da liễu', 4, '0912345678'),
 (5, 'BS. Vũ Quang Du', 'BS Tim mạch', 8, '0342961367'),
 (4, 'BS. Nguyễn Khắc Phát', 'BS Răng Hàm Mặt', 4, '0987654321');
+
+INSERT INTO TAI_KHOAN (TenDangNhap, MatKhau, VaiTro, TrangThai) 
+VALUES ('admin', '11072006', 'ADMIN', 1);
+
+INSERT INTO TAI_KHOAN (TenDangNhap, MatKhau, VaiTro, TrangThai) 
+VALUES 
+('bs_quang', '123456', 'BAC_SI', 1),
+('bs_nhung', '123456', 'BAC_SI', 1),
+('bs_phuc',  '123456', 'BAC_SI', 1),
+('bs_du',    '123456', 'BAC_SI', 1),
+('bs_phat',  '123456', 'BAC_SI', 1);
+
+UPDATE BAC_SI 
+SET AccountID = (SELECT AccountID FROM TAI_KHOAN WHERE TenDangNhap = 'bs_quang') 
+WHERE HoTen = 'BS. Lê Văn Quang';
+
+UPDATE BAC_SI 
+SET AccountID = (SELECT AccountID FROM TAI_KHOAN WHERE TenDangNhap = 'bs_nhung') 
+WHERE HoTen = 'BS. Lê Thị Hồng Nhung';
+
+UPDATE BAC_SI 
+SET AccountID = (SELECT AccountID FROM TAI_KHOAN WHERE TenDangNhap = 'bs_phuc') 
+WHERE HoTen = 'BS. Trần Văn Phục';
+
+UPDATE BAC_SI 
+SET AccountID = (SELECT AccountID FROM TAI_KHOAN WHERE TenDangNhap = 'bs_du') 
+WHERE HoTen = 'BS. Vũ Quang Du';
+
+UPDATE BAC_SI 
+SET AccountID = (SELECT AccountID FROM TAI_KHOAN WHERE TenDangNhap = 'bs_phat') 
+WHERE HoTen = 'BS. Nguyễn Khắc Phát';
+
+ALTER TABLE LICH_HEN 
+MODIFY COLUMN TrangThai ENUM('CHO_XAC_NHAN','DA_XAC_NHAN','DA_KHAM','HUY','VANG_MAT') DEFAULT 'CHO_XAC_NHAN';
