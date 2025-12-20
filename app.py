@@ -213,6 +213,7 @@ def thong_tin_phong_kham():
                            thong_tin=thong_tin,
                            ds_bac_si=ds_bac_si)
 
+# --- Thay thế toàn bộ hàm trang_benh_nhan cũ bằng hàm này ---
 @app.route("/trang-benh-nhan")
 def trang_benh_nhan():
     if "account_id" not in session:
@@ -221,12 +222,21 @@ def trang_benh_nhan():
     account_id = session["account_id"]
     conn = get_connection()
     lich_hen = []
+    thong_bao_nhac_lich = [] # US06: Danh sách thông báo
+    cai_dat_thong_bao = 1    # US06: Mặc định là bật
+
     try:
         with conn.cursor() as cur:
+            # 1. Lấy cấu hình nhận thông báo (US06)
+            cur.execute("SELECT NhanThongBao FROM BENH_NHAN WHERE AccountID = %s", (account_id,))
+            bn_info = cur.fetchone()
+            if bn_info:
+                cai_dat_thong_bao = bn_info["NhanThongBao"]
+
+            # 2. Lấy danh sách lịch hẹn (kèm đánh giá cho US05 nếu đã làm)
             sql = """
                 SELECT lh.LichHenID, lh.NgayKham, lh.GioKham, lh.TrangThai,
-                       bs.HoTen AS TenBacSi,
-                       dg.SoSao
+                       bs.HoTen AS TenBacSi, dg.SoSao
                 FROM LICH_HEN lh
                 JOIN BENH_NHAN bn ON lh.PatientID = bn.PatientID
                 JOIN BAC_SI bs ON lh.BacSiID = bs.BacSiID
@@ -236,6 +246,33 @@ def trang_benh_nhan():
             """
             cur.execute(sql, (account_id,))
             lich_hen = cur.fetchall()
+
+            # 3. Logic tạo thông báo nhắc lịch (US06)
+            # Chỉ chạy nếu người dùng bật cấu hình
+            if cai_dat_thong_bao == 1:
+                now = datetime.now()
+                for lh in lich_hen:
+                    if lh["TrangThai"] == 'DA_XAC_NHAN':
+                        # Tạo datetime đầy đủ từ NgayKham và GioKham
+                        # GioKham trong DB thường là timedelta, cần cộng với datetime.min để ra time
+                        gio_kham_time = (datetime.min + lh["GioKham"]).time()
+                        thoi_gian_kham = datetime.combine(lh["NgayKham"], gio_kham_time)
+                        
+                        # Tính khoảng cách thời gian
+                        diff = thoi_gian_kham - now
+                        seconds_diff = diff.total_seconds()
+
+                        # Nếu lịch khám diễn ra trong vòng 24h tới (0 <= diff <= 86400 giây)
+                        if 0 <= seconds_diff <= 86400:
+                            gio_con_lai = int(seconds_diff / 3600)
+                            phut_con_lai = int((seconds_diff % 3600) / 60)
+                            
+                            time_str = f"{gio_con_lai} giờ" if gio_con_lai > 0 else f"{phut_con_lai} phút"
+                            
+                            msg = f"Sắp đến lịch khám với {lh['TenBacSi']} lúc {lh['GioKham']} ngày {lh['NgayKham'].strftime('%d/%m')}. (Còn khoảng {time_str})"
+                            thong_bao_nhac_lich.append(msg)
+
+            # Format ngày hiển thị ra giao diện
             for lh in lich_hen:
                 if lh["NgayKham"]:
                     lh["NgayKham"] = lh["NgayKham"].strftime("%d/%m/%Y")
@@ -246,9 +283,33 @@ def trang_benh_nhan():
     return render_template(
         "trang_benh_nhan.html",
         ten_dang_nhap=session.get("ten_dang_nhap"),
-        lich_hen=lich_hen
+        lich_hen=lich_hen,
+        thong_bao_nhac_lich=thong_bao_nhac_lich, # Truyền biến thông báo
+        cai_dat_thong_bao=cai_dat_thong_bao      # Truyền biến cấu hình
     )
 
+# --- Thêm hàm mới để xử lý bật/tắt (US06) ---
+@app.route("/cai-dat-thong-bao", methods=["POST"])
+def xu_ly_cai_dat_thong_bao():
+    if "account_id" not in session:
+        return redirect(url_for("dang_nhap"))
+
+    # Nếu checkbox được tích, nó gửi value="on", ngược lại là None
+    trang_thai_moi = 1 if request.form.get("nhan_thong_bao") == "on" else 0
+    
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                UPDATE BENH_NHAN 
+                SET NhanThongBao = %s 
+                WHERE AccountID = %s
+            """, (trang_thai_moi, session["account_id"]))
+        conn.commit()
+    finally:
+        conn.close()
+        
+    return redirect(url_for("trang_benh_nhan"))
 
 @app.route("/dat-lich", methods=["GET", "POST"])
 def dat_lich():

@@ -10,6 +10,42 @@ Lịch hẹn của tôi
 {% endblock %}
 
 {% block content %}
+{% if thong_bao_nhac_lich %}
+<div class="alert" style="background-color: #fffbeb; border: 1px solid #fcd34d; color: #92400e; margin-bottom: 20px;">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+        <span style="font-size: 20px;">🔔</span>
+        <strong>Lịch khám sắp tới</strong>
+    </div>
+    <ul style="margin: 0; padding-left: 24px;">
+        {% for msg in thong_bao_nhac_lich %}
+            <li style="margin-bottom: 4px;">{{ msg }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<div class="card" style="margin-bottom: 20px; padding: 15px 20px;">
+    <form method="POST" action="{{ url_for('xu_ly_cai_dat_thong_bao') }}" style="display: flex; align-items: center; justify-content: space-between;">
+        
+        <div>
+            <h3 class="h1" style="font-size: 16px; margin-bottom: 4px;">Thông báo nhắc lịch</h3>
+            <p class="muted" style="margin: 0; font-size: 13px;">Nhận nhắc nhở trên web trước giờ khám 24 tiếng.</p>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 13px; font-weight: 600; color: var(--text-muted);">
+                {{ 'ĐANG BẬT' if cai_dat_thong_bao == 1 else 'ĐANG TẮT' }}
+            </span>
+            
+            <label class="switch">
+                <input type="checkbox" name="nhan_thong_bao" onchange="this.form.submit()" 
+                       {% if cai_dat_thong_bao == 1 %}checked{% endif %}>
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+    </form>
+</div>
 <div class="card">
 
   <div class="card__header card__header--row">
