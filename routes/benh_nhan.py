@@ -1,4 +1,3 @@
-# routes/benh_nhan.py
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from db import get_connection
 from datetime import datetime
@@ -6,27 +5,24 @@ import uuid
 
 benh_nhan_bp = Blueprint('benh_nhan', __name__)
 
-# --- 1. TRANG CHỦ BỆNH NHÂN (Đã bỏ logic lấy Token) ---
 @benh_nhan_bp.route("/trang-benh-nhan")
 def trang_benh_nhan():
-    if "account_id" not in session: return redirect(url_for("auth.dang_nhap"))
+    if "account_id" not in session: 
+        return redirect(url_for("auth.dang_nhap"))
     
     account_id = session["account_id"]
     conn = get_connection()
     lich_hen = []
     thong_bao_nhac_lich = []
     cai_dat_thong_bao = 1
-    # Đã bỏ share_token ở đây vì không cần hiển thị QR code tại dashboard nữa
 
     try:
         with conn.cursor() as cur:
-            # Chỉ lấy cài đặt thông báo
             cur.execute("SELECT NhanThongBao FROM BENH_NHAN WHERE AccountID = %s", (account_id,))
             bn_info = cur.fetchone()
             if bn_info:
                 cai_dat_thong_bao = bn_info["NhanThongBao"]
 
-            # Lấy danh sách lịch hẹn
             sql = """
                 SELECT lh.LichHenID, lh.NgayKham, lh.GioKham, lh.TrangThai,
                        bs.HoTen AS TenBacSi, dg.SoSao
@@ -40,7 +36,6 @@ def trang_benh_nhan():
             cur.execute(sql, (account_id,))
             lich_hen = cur.fetchall()
 
-            # Logic nhắc lịch
             if cai_dat_thong_bao == 1:
                 now = datetime.now()
                 for lh in lich_hen:
@@ -54,7 +49,8 @@ def trang_benh_nhan():
                             thong_bao_nhac_lich.append(msg)
 
             for lh in lich_hen:
-                if lh["NgayKham"]: lh["NgayKham"] = lh["NgayKham"].strftime("%d/%m/%Y")
+                if lh["NgayKham"]: 
+                    lh["NgayKham"] = lh["NgayKham"].strftime("%d/%m/%Y")
             
     finally:
         conn.close()
@@ -65,10 +61,10 @@ def trang_benh_nhan():
         cai_dat_thong_bao=cai_dat_thong_bao
     )
 
-# --- 2. HÀM MỚI: QUẢN LÝ CHIA SẺ (Trang riêng) ---
 @benh_nhan_bp.route("/quan-ly-chia-se")
 def quan_ly_chia_se():
-    if "account_id" not in session: return redirect(url_for("auth.dang_nhap"))
+    if "account_id" not in session: 
+        return redirect(url_for("auth.dang_nhap"))
     
     conn = get_connection()
     share_token = None
@@ -83,11 +79,10 @@ def quan_ly_chia_se():
         
     return render_template("quan_ly_chia_se.html", share_token=share_token)
 
-
-# --- 3. XỬ LÝ TẠO/HỦY LINK (Redirect về trang quản lý mới) ---
 @benh_nhan_bp.route("/tao-lien-ket-chia-se", methods=["POST"])
 def tao_lien_ket_chia_se():
-    if "account_id" not in session: return redirect(url_for("auth.dang_nhap"))
+    if "account_id" not in session: 
+        return redirect(url_for("auth.dang_nhap"))
     
     action = request.form.get("hanh_dong")
     conn = get_connection()
@@ -99,20 +94,21 @@ def tao_lien_ket_chia_se():
     finally:
         conn.close()
     
-    # Quan trọng: Redirect về trang quản lý chia sẻ, KHÔNG phải trang bệnh nhân
     return redirect(url_for("benh_nhan.quan_ly_chia_se"))
 
 
 @benh_nhan_bp.route("/dat-lich", methods=["GET", "POST"])
 def dat_lich():
-    if "account_id" not in session: return redirect(url_for("auth.dang_nhap"))
+    if "account_id" not in session: 
+        return redirect(url_for("auth.dang_nhap"))
     account_id = session["account_id"]
     conn = get_connection()
     try:
         with conn.cursor() as cur:
             cur.execute("SELECT PatientID FROM BENH_NHAN WHERE AccountID = %s", (account_id,))
             bn = cur.fetchone()
-            if not bn: return "Lỗi: Không tìm thấy thông tin bệnh nhân."
+            if not bn: 
+                return "Lỗi: Không tìm thấy thông tin bệnh nhân."
             patient_id = bn["PatientID"]
 
             cur.execute("SELECT BacSiID, HoTen FROM BAC_SI WHERE TrangThai = 1")
@@ -135,7 +131,8 @@ def dat_lich():
 
 @benh_nhan_bp.route("/huy-lich/<int:lich_hen_id>", methods=["POST"])
 def huy_lich(lich_hen_id):
-    if "account_id" not in session: return redirect(url_for("auth.dang_nhap"))
+    if "account_id" not in session: 
+        return redirect(url_for("auth.dang_nhap"))
     conn = get_connection()
     try:
         with conn.cursor() as cur:
@@ -151,7 +148,8 @@ def huy_lich(lich_hen_id):
 
 @benh_nhan_bp.route("/danh-gia/<int:lich_hen_id>", methods=["GET", "POST"])
 def danh_gia(lich_hen_id):
-    if "account_id" not in session: return redirect(url_for("auth.dang_nhap"))
+    if "account_id" not in session: 
+        return redirect(url_for("auth.dang_nhap"))
     conn = get_connection()
     try:
         with conn.cursor() as cur:
@@ -161,7 +159,8 @@ def danh_gia(lich_hen_id):
                 WHERE lh.LichHenID = %s AND bn.AccountID = %s AND lh.TrangThai = 'DA_KHAM'
             """, (lich_hen_id, session["account_id"]))
             lich = cur.fetchone()
-            if not lich: return "Lỗi: Lịch hẹn không hợp lệ."
+            if not lich: 
+                return "Lỗi: Lịch hẹn không hợp lệ."
 
             if request.method == "GET":
                 return render_template("danh_gia.html", lich=lich)
@@ -176,7 +175,8 @@ def danh_gia(lich_hen_id):
 
 @benh_nhan_bp.route("/cai-dat-thong-bao", methods=["POST"])
 def xu_ly_cai_dat_thong_bao():
-    if "account_id" not in session: return redirect(url_for("auth.dang_nhap"))
+    if "account_id" not in session: 
+        return redirect(url_for("auth.dang_nhap"))
     trang_thai = 1 if request.form.get("nhan_thong_bao") == "on" else 0
     conn = get_connection()
     try:
