@@ -100,7 +100,7 @@
                     {# Nút HỦY #}
                     {% if lh.TrangThai in ['CHO_XAC_NHAN', 'DA_XAC_NHAN'] %}
                     <form method="POST" action="{{ url_for('bac_si.cap_nhat_trang_thai', lich_hen_id=lh.LichHenID, trang_thai='HUY') }}" onsubmit="return confirm('Bạn chắc chắn muốn hủy lịch này?');">
-                        <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--red);">Hủy</button>
+                        <button type="submit" class="btn btn-ghost btn-sm btn-danger">Hủy</button>
                     </form>
                     {% endif %}
                 </div>

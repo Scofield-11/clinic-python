@@ -1,4 +1,3 @@
-# routes/bac_si.py
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from db import get_connection
 
@@ -25,8 +24,6 @@ def quan_ly_lich_hen():
                 bs_info = cur.fetchone()
                 if bs_info: 
                     sql += f" WHERE lh.BacSiID = {bs_info['BacSiID']}"
-            
-            sql += " ORDER BY lh.NgayKham DESC, lh.GioKham ASC"
             cur.execute(sql)
             ds_lich_hen = cur.fetchall()
     finally:

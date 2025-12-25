@@ -292,8 +292,8 @@ a:hover{ text-decoration: underline; }
 }
 
 .badge--CHO_XAC_NHAN{
-  background: #fff7ed;
-  color: #9a3412;
+  background: #df800c;
+  color: #000000;
 }
 .badge--DA_XAC_NHAN{
   background: var(--blue-soft);
@@ -679,7 +679,7 @@ a:hover{ text-decoration: underline; }
     align-items: flex-start;
 }
 .qr-box {
-    background: white;
+    background: rgb(111, 118, 180);
     padding: 10px;
     border-radius: 8px;
     border: 1px solid var(--border);
